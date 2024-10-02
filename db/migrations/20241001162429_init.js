@@ -16,16 +16,4 @@ exports.down = function(knex) {
 };
 
  // migrations/create_todos_table.js
- exports.up = function(knex) {
-  return knex.schema.createTable('todos', table => {
-    table.increments('id').primary();
-    table.string('task');
-    table.boolean('completed').defaultTo(false);
-    table.integer('user_id').references('id').inTable('users');
-    table.timestamps();
-  });
-};
-
-exports.down = function(knex) {
-  return knex.schema.dropTable('todos')
-}
+ 

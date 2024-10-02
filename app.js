@@ -11,13 +11,12 @@ app.use(bodyParser.urlencoded({ extended: true }))
 // const cookieParser = require('cookie-parser');
 // app.use(db);
 
-app.use('/api/v1', usersRoute);
-
 app.use((req, res, next) => {
     req.db = db;  // Add db to request object
     next();  // Move to the next middleware/route handler
   });
 
+  app.use('/api/v1', usersRoute);
 // app.get('/', (res,req) => {
 //     console.log('Fetching...')
 // })
