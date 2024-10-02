@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "description": "A Todo API",
   "main": "index.js",
-  "type": "module",
   "scripts": {
+    "make": "npx knex --knexfile ./db/knexfile.js migrate:make newtable",
+    "migrate": "npx knex  migrate:latest --knexfile db/knexfile.js",
     "dev": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

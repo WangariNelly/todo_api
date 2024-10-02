@@ -1,7 +1,7 @@
-import * as dotenv from 'dotenv';
-dotenv.config({ path: '.env' });
+require("dotenv").config({ path: "./config/.env" });
 
-import app from './app.js';
+// const knex = require('knex')(require('./db/knexfile.js'));
+const app = require("./app");
 
 app.listen(process.env.PORT, () => {
 	console.log(

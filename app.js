@@ -1,9 +1,15 @@
-import express from 'express';
+const express = require('express');
 const app = express();
-import router from './routes';
 
+const usersRoute = require('./routes/usersRoute.js')
+// const pool = require('./db/db.js');
+// const knex = require('knex')(require('./db/knexfile.js'));
+// const cookieParser = require('cookie-parser');
 app.use(express.json());
-app.use(router);
+
+// app.use(pool);
+//routes
+app.use('/api/v1/', usersRoute);
 
 
-export default app;
+module.exports = app;
