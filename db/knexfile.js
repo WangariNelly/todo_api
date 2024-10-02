@@ -1,5 +1,4 @@
-require("dotenv").config 
-const pg = require('pg');
+require("dotenv").config({ path: "/config/.env" });
 const { TableName } = require("pg-promise");
 
 module.exports = {
