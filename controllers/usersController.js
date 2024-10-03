@@ -2,13 +2,13 @@ const express = require('express');
 const db = require('../db/db.js');
 
 exports.registerUser = async (req, res) => {
-  const { email, password, name } = req.body;
+  const { email, password, username } = req.body;
   console.log(req.body);
   try {
     const newUser = {
       email,
       password,
-      name,
+      username,
     };
     // newUser.password = await bcrypt.hash(password, 10);
 
