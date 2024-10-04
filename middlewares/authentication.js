@@ -1,17 +1,19 @@
 const jwt = require('jsonwebtoken');
-const User = require('../db/migrations');
-const ErrorHandler = require('../utils/errorHandler');
-const catchAsyncErrors = require('./catchAsyncErrors');
+// const ErrorHandler = require('../utils/errorHandler');
 
 //checks if user is authenticated or not
-exports.isAuthenticatedUser = catchAsyncErrors(async (req, res, next) => {
-  const { token } = req.cookies;
+function AuthenticateToken(req, res, next) {
+  const authHeader = req.headers['authorization']; //Bearer token
+  const token = authHeader && authHeader.split(' ')[1];
   console.log(token);
   if (!token) {
-    return next(new ErrorHandler('Login first to access resource', 401));
+    return res.status(401).json({ error: 'Login first to get token' });
   }
-  const decoded = jwt.verify(token, process.env.JWT_SECRET);
-  req.username = await User.findById(decoded.id);
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (error, user) => {
+    if (error) return res.status(403).json({ error: error.message });
+    req.user = user;
+    next(); //user in payload
+  });
+}
 
-  next();
-});
+module.exports = { AuthenticateToken };

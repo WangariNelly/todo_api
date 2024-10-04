@@ -81,7 +81,9 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
     res.cookie('refresh_token', tokens.refreshToken, { httpOnly: true });
     res.json(tokens);
   } catch (error) {
-    // console.error('Error logging in user:', error);
-    // return res.status(500).json({ error: 'Internal Server Error' })
+    console.error('Error logging in user:', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+//Forgot password
