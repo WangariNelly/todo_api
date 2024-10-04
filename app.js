@@ -4,10 +4,11 @@ const app = express();
 const usersRoute = require('./routes/authRoute.js');
 const db = require('./db/db.js');
 const bodyParser = require('body-parser');
-// const cookie = require('cookie-parser');
+const cookieParser = require('cookie-parser');
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 app.use((req, res, next) => {
   req.db = db; // Add db to request object
