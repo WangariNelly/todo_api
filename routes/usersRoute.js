@@ -1,12 +1,12 @@
 const express = require('express');
-const router = express.Router();
+const db = require('../db/db.js');
 
-const {
-  registerUser,
-  loginUser,
-} = require('../controllers/usersController.js');
-
-router.route('/register').post(registerUser);
-router.route('/login').post(loginUser);
-
-module.exports = router;
+exports.getAllUsers = async (req, res) => {
+  try {
+    const users = await req.db('users').select('*');
+    res.json(users);
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
