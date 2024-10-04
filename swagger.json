@@ -1,0 +1,245 @@
+{
+	"openapi": "3.0.3",
+	"info": {
+		"title": "Todo API",
+		"description": "A todo application",
+		"version": "1.0.0"
+	},
+	"servers": [
+		{
+			"url": "http://localhost:3000/api/v1"
+		}
+	],
+	"paths": {
+		"/login": {
+			"post": {
+				"tags": ["Login User"],
+				"summary": "Logs the user into the system",
+				"description": "Logs in the user with creadentials provided, sends token to authorize",
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"email": {
+										"type": "string",
+										"example": "example@example.com",
+										"description": "User's email address",
+										"minLength": 1,
+										"format": "email"
+									},
+									"password": {
+										"type": "string",
+										"example": "P@ssw0rd!",
+										"description": "User's password",
+										"minLength": 8
+									}
+								},
+								"required": [
+									"email",
+									"password"
+								]
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Success",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"success": {
+											"type": "boolean",
+											"example": true
+										},
+										"message": {
+											"type": "string",
+											"example": "Token:"
+										}
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal Server Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"success": {
+											"type": "boolean",
+											"example": false
+										},
+										"message": {
+											"type": "string",
+											"example": "Internal Server error!"
+										}
+									}
+								}
+							}
+						}
+					},
+					"503": {
+						"description": "Service Unavailable!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"success": {
+											"type": "boolean",
+											"example": false
+										},
+										"message": {
+											"type": "string",
+											"example": "Todo API is down!"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/register": {
+			"post": {
+				"tags": ["Create new user"],
+				"summary": "User registration",
+				"description": "Registers user and validates input data from the user",
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"email": {
+										"type": "string",
+										"example": "example@example.com",
+										"description": "User's email address",
+										"minLength": 1,
+										"format": "email"
+									},
+									"username": {
+										"type": "string",
+										"example": "John",
+										"description": "User's names"
+									},
+									"password": {
+										"type": "string",
+										"example": "P@ssw0rd!",
+										"description": "User's password",
+										"minLength": 8
+									}
+								},
+								"required": [
+									"email",
+									"username",
+									"password"
+								]
+							}
+						}
+					}
+				},
+				"responses": {
+					"201": {
+						"description": "Created!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"success": {
+											"type": "boolean",
+											"example": true
+										},
+										"message": {
+											"type": "string",
+											"example": "Registration successful!"
+										}
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal Server Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"success": {
+											"type": "boolean",
+											"example": false
+										},
+										"message": {
+											"type": "string",
+											"example": "Internal Server error!"
+										}
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid request data",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"success": {
+											"type": "boolean",
+											"example": false
+										},
+										"errors": {
+											"type": "array",
+											"items": {
+												"type": "string"
+											},
+											"example": [
+												"Request body is empty,Try again!",
+												"Email is required!",
+												"FirstName must have a minimum of 3 characters!",
+												"Password must contain at least 1 digit, 1 special character, and 1 lowercase letter and 1 uppercase letter"
+											]
+										}
+									}
+								}
+							}
+						}
+					},
+					"503": {
+						"description": "Service Unavailable!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"success": {
+											"type": "boolean",
+											"example": false
+										},
+										"message": {
+											"type": "string",
+											"example": "Application failed to process the request"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
