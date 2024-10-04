@@ -1,5 +1,5 @@
-require("dotenv").config({ path: "/config/.env" });
-const { TableName } = require("pg-promise");
+require('dotenv').config({ path: '/config/.env' });
+const { TableName } = require('pg-promise');
 
 module.exports = {
   development: {
@@ -19,5 +19,3 @@ module.exports = {
     },
   },
 };
-
-

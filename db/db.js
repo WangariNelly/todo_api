@@ -1,10 +1,5 @@
-
 const knex = require('knex');
-// const knexfile = require('./knexfile.js');
 
-// const dbConnection = knex(knexfile.development);
-
-// module.exports = dbConnection;
 const db = knex({
   client: 'postgresql',
   connection: {
