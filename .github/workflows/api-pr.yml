@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./todo-Api
+        working-directory: ../todo-Api
 
     steps:
       - name: Checkout
