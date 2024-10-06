@@ -1,4 +1,26 @@
-require('dotenv').config({ path: '/config/.env' });
+// require('dotenv').config({ path: '/config/.env' });
+// const nodemailer = require('nodemailer');
+
+//   const transport = nodemailer.createTransport({
+//     host: process.env.SMTP_HOST,
+//     port: process.env.SMTP_PORT,
+//     auth: {
+//       user: process.env.SMTP_USER,
+//       pass: process.env.SMTP_PASSWORD,
+//     },
+//   });
+
+//   const sendEmail = async ({ recepients, subject, message }) => {
+//     return await  transport.sendMail({
+//       from:'no-reply@todo.com',
+//       to: recepients,
+//       subject,
+//       text: message,
+//     });
+//   };
+
+// module.exports = { sendEmail };
+
 const nodemailer = require('nodemailer');
 
 const sendEmail = async (options) => {
@@ -20,4 +42,4 @@ const sendEmail = async (options) => {
   await transporter.sendMail(message);
 };
 
-module.exports = sendEmail;
+module.exports = { sendEmail };

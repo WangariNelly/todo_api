@@ -1,12 +1,13 @@
 const express = require('express');
 const db = require('../db/db.js');
 const Joi = require('joi');
+const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 const ErrorHandler = require('../middlewares/errors.js');
 const catchAsyncErrors = require('../middlewares/catchAsyncErrors.js');
 const { jwtTokens } = require('../utils/jwtToken.js');
-const { sendWelcomeEmail } = require('../utils/emailMessage.js');
 const jwt = require('jsonwebtoken');
+const { sendEmail } = require('../utils/sendEmail.js');
 
 exports.registerUser = async (req, res) => {
   const { email, password, username } = req.body;
@@ -48,9 +49,13 @@ exports.registerUser = async (req, res) => {
     };
     newUser.password = await bcrypt.hash(password, 10);
     await req.db('users').insert(newUser);
-    return res.status(201).json({
-      message: 'Registration successful!',
-      // sendWelcomeEmail,
+    // return res.status(201).json({
+    //   message: 'Registration successful!',
+    // });
+    await sendEmail({
+      email: newUser.email,
+      subject: 'Login successful!',
+      message: 'Welcome to your todo page',
     });
   } catch (error) {
     console.log(error);
@@ -82,7 +87,7 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
     //password check
     const isPasswordMatched = await bcrypt.compare(password, user.password);
     if (!isPasswordMatched) {
-      return res.status(401).json({ error: 'Incorrect password!' });
+      return next(new ErrorHandler('Invalid email or password', 401));
     }
     // return res.status(200).json('Success!');
     //jwt
@@ -132,72 +137,105 @@ exports.logout = catchAsyncErrors(async (req, res, next) => {
 
 //forgot password
 
-// exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
-//   const { email } = req.body;
-// //validate email input
-//   const validateSchema = Joi.object({
-//     email: Joi.string().email().required(),
-//   });
+exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
+  const { email } = req.body;
+  //validate email input
+  const validate = Joi.object({
+    email: Joi.string().email().required(),
+  });
 
-//   const { error } = validateSchema.validate(req.body);
-//   if (error) {
-//     return res.status(401).json({ " Enter a valid email!"})
-//   }
+  const { error } = validate.validate(req.body);
+  if (error) {
+    return res.status(401).json({ Error: ' Enter a valid email! ' });
+  }
 
-//   // Query user by email using Knex
-//   try {
-//     const user = await knex('users')
-//       .where('email', email)
-//       .first();
+  // Query user by email using Knex
+  try {
+    const user = await req.db('users').where('email', email).first();
 
-//     if (!user) {
-//       return next(new ErrorHandler('User not found with this email', 404));
-//     }
-//   } catch (error) {
-//     console.error(error); // Log the error for debugging
-//     return next(new ErrorHandler('Internal server error', 500));
-//   }
+    if (!user) {
+      return next(new ErrorHandler('User not found with this email', 404));
+    }
+  } catch (error) {
+    console.error(error); // Log the error for debugging
+    return next(new ErrorHandler('Internal server error', 500));
+  }
 
-//   // Generate reset token (implement your preferred token generation logic)
-//   const resetToken = /* ... your token generation logic ... */;
+  // Generate reset token (implement your preferred token generation logic)
+  const resetToken = jwtTokens(user).refreshToken;
+  res.cookie('refresh_token', resetToken, { httpOnly: true });
+  console.log(jwtTokens(user));
+  res.json(jwtTokens(user));
 
-//   // Create reset password URL (consider using environment variables for base URL)
-//   const resetUrl = `${process.env.BASE_URL || req.protocol}://${req.get('host')}/api/v1/password/reset/${resetToken}`;
+  // Create reset password URL
+  const resetUrl = `${req.protocol}://${req.get('host')}/api/v1/password/reset/${resetToken}`;
 
-//   // Update user's reset password token and expiration in the database using Knex
-//   try {
-//     await knex('users')
-//       .where('id', user.id)
-//       .update({
-//         reset_password_token: resetToken,
-//         reset_password_expire: Date.now() + 3600000, // 1 hour in milliseconds
-//       });
-//   } catch (error) {
-//     console.error(error); // Log the error for debugging
-//     return next(new ErrorHandler('Internal server error', 500));
-//   }
+  // Update user's reset password token and expiration in the database
+  try {
+    await req
+      .db('users')
+      .where('id', user.id)
+      .update({
+        reset_password_token: resetToken,
+        reset_password_expire: Date.now() + 3600000,
+      });
+  } catch (error) {
+    console.error(error);
+    return next(new ErrorHandler('Internal server error', 500));
+  }
 
-//   const message = `Your password reset token is as follows:\n\n${resetUrl}\n\nIf you have not requested this email, then ignore it.`;
+  const message = `Your password reset token is as follows:\n\n${resetUrl}\n\nIf you have not requested this email, then ignore it.`;
 
-//   // Send email using Nodemailer
-//   try {
-//     await sendEmail({
-//       email: user.email,
-//       subject: 'ShopIT Password Recovery',
-//       message,
-//     });
-//     res.status(200).json({
-//       success: true,
-//       message: `Email sent to ${user.email}`,
-//     });
-//   } catch (error) {
-//     // Reset user's password reset data if email sending fails
-//     await knex('users')
-//       .where('id', user.id)
-//       .update({
-//         reset_password_token: null,
-//         reset_password_expire: null,
-//       });
-//     return next(new ErrorHandler('Error sending email', 500));
-//   }
-// });
+  // Send email using Nodemailer
+  try {
+    await sendEmail({
+      email: user.email,
+      subject: 'Todo Password Recovery',
+      message,
+    });
+    res.status(200).json({
+      success: true,
+      message: `Email sent to ${user.email}`,
+    });
+  } catch (error) {
+    // Reset user's password reset data if email sending fails
+    await req.db('users').where('id', user.id).update({
+      reset_password_token: null,
+      reset_password_expire: null,
+    });
+    return next(new ErrorHandler('Error sending email', 500));
+  }
+});
+
+//Reset password
+exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
+  const resetPasswordTokenHash = await bcrypt.hash(req.params.token, 10);
+
+  const user = await req
+    .db('users')
+    .where({
+      reset_password_token: resetPasswordTokenHash,
+      reset_password_expire: {
+        '>': Date.now(),
+      },
+    })
+    .first();
+
+  if (!user) {
+    return next(
+      new ErrorHandler('Password token is Invalid or has expired', 400),
+    );
+  }
+
+  if (req.body.password !== req.body.confirmPassword) {
+    return next(new ErrorHandler('Password does not match', 400));
+  }
+
+  user.password = await bcrypt.hash(req.body.password, 10);
+  user.reset_password_token = null;
+  user.reset_password_expire = null;
+
+  await req.db('users').where({ id: user.id }).update(user);
+
+  sendToken(user, 200, res);
+});

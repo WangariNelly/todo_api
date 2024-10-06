@@ -5,6 +5,7 @@ const app = express();
 const swaggerUi = require('swagger-ui-express');
 
 const usersRoute = require('./routes/authRoute.js');
+const taskRoutes = require('./routes/taskRoutes.js');
 const db = require('./db/db.js');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
@@ -22,6 +23,7 @@ app.use((req, res, next) => {
 const baseUrl = '/api/v1';
 
 app.use(baseUrl, usersRoute);
+app.use(baseUrl, taskRoutes);
 
 app.use(
   baseUrl + '/swagger',
