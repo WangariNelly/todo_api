@@ -16,16 +16,4 @@ function jwtTokens({ id, username, email }) {
   return { accessToken, refreshToken };
 }
 
-// function jwtTokens(user) {
-//     const accessToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
-//       expiresIn: process.env.JWT_ACCESS_EXPIRE,
-//     });
-
-//     const refreshToken = jwt.sign({ id: user.id }, process.env.JWT_REFRESH_SECRET, {
-//       expiresIn: process.env.JWT_REFRESH_EXPIRE,
-//     });
-
-//     return { accessToken, refreshToken };
-//   }
-
 module.exports = { jwtTokens };
