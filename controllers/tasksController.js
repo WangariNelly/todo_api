@@ -5,19 +5,29 @@ const ErrorHandler = require('../middlewares/errors.js');
 
 //create new todos
 exports.createTodo = catchAsyncErrors(async (req, res, next) => {
-  const { task, completed, user_id } = req.body;
-  const newTodo = await req
-    .db('todos')
-    .insert({
-      task,
-      completed,
-      user_id,
-    })
-    .returning('*');
+  // Validate TODO existence
+  const existingTodo = await req.db.raw(
+    'SELECT EXISTS(SELECT 1 FROM todos WHERE task = ? AND user_id = ?)',
+    [req.body.task, req.body.user_id],
+  );
+
+  if (existingTodo.rows[0].exists) {
+    return res.status(400).json({
+      success: false,
+      message: 'Todo with the same task and user already exists.',
+    });
+  }
+  await req.db.raw('CALL create_todo(?, ?, ?)', [
+    req.body.task,
+    req.body.completed,
+    req.body.user_id,
+  ]);
+  const todoId = await req.db.raw('SELECT lastval() AS todo_id');
+
   res.status(201).json({
     success: true,
     message: 'Todo created successfully!',
-    todo: newTodo[0],
+    todo_id: todoId.rows[0].todo_id,
   });
 });
 
@@ -71,7 +81,6 @@ exports.updateTodo = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
-// Delete a Todo by ID
 exports.deleteTodo = catchAsyncErrors(async (req, res, next) => {
   const todo = await req.db('todos').where('id', req.params.id).first();
 

@@ -8,7 +8,7 @@ exports.up = function (knex) {
     table.string('task');
     table.boolean('completed').defaultTo(false);
     table.integer('user_id').references('id').inTable('users');
-    table.timestamps();
+    table.timestamps(true, true);
   });
 };
 

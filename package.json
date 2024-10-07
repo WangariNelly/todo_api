@@ -4,8 +4,8 @@
   "description": "A Todo API",
   "main": "index.js",
   "scripts": {
-    "make": "npx knex --knexfile ./db/knexfile.js migrate:make newtable",
-    "migrate": "npx knex  migrate:latest --knexfile db/knexfile.js",
+    "make": "npx knex --knexfile ./db/knexfile.js migrate:make create_stored_procedure",
+    "migrate": "npx knex  migrate:latest --knexfile db/knexfimile.js",
     "dev": "nodemon --legacy-watch server.js",
     "format": "prettier --write \"**/*.js\"",
     "format-check": "prettier --check \"**/*.js\"",
