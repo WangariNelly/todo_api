@@ -240,6 +240,135 @@
 					}
 				}
 			}
+		},
+		"/new/todo/": {
+			"post": {
+				"tags": ["Create new task"],
+				"summary": "Task create",
+				"description": "Creates new tasks on your todo list",
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"task": {
+										"type": "string",
+										"example": "Code",
+										"description": "Task to be done",
+										"minLength": 1
+									},
+									"completed": {
+										"type": "boolean",
+										"example": "false",
+										"description": "Shows task status"
+									},
+									"user_id": {
+										"type": "integer",
+										"example": "1",
+										"description": "User's in user table id",
+										"minLength": 5
+									}
+								},
+								"required": [
+									"task",
+									"completed",
+									"user_id"
+								]
+							}
+						}
+					}
+				},
+				"responses": {
+					"201": {
+						"description": "Created!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"success": {
+											"type": "boolean",
+											"example": true
+										},
+										"message": {
+											"type": "string",
+											"example": "Todo created successfully!"
+										}
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal Server Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"success": {
+											"type": "boolean",
+											"example": false
+										},
+										"message": {
+											"type": "string",
+											"example": "Internal Server error!"
+										}
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid request data",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"success": {
+											"type": "boolean",
+											"example": false
+										},
+										"errors": {
+											"type": "array",
+											"items": {
+												"type": "string"
+											},
+											"example": [
+												"Request body is empty,Try again!",
+												"user_id is required!"
+											]
+										}
+									}
+								}
+							}
+						}
+					},
+					"503": {
+						"description": "Service Unavailable!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"success": {
+											"type": "boolean",
+											"example": false
+										},
+										"message": {
+											"type": "string",
+											"example": "Application failed to process the request"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 }

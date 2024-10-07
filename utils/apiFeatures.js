@@ -20,7 +20,7 @@ class TodoFeatures {
     delete queryCopy.limit;
     delete queryCopy.page;
 
-    const filterFields = ['completed', 'priority', 'category'];
+    const filterFields = ['completed', 'createdAt', 'tasks'];
     const filters = Object.entries(queryCopy).filter(
       ([key, value]) => filterFields.includes(key) && value !== '',
     );

@@ -7,7 +7,9 @@ function AuthenticateToken(req, res, next) {
   const token = authHeader && authHeader.split(' ')[1];
   console.log(token);
   if (!token) {
-    return res.status(401).json({ error: 'Login first to get token' });
+    return res
+      .status(401)
+      .json({ error: 'Login first to get access resources!' });
   }
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (error, user) => {
     if (error) return res.status(403).json({ error: error.message });
