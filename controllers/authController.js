@@ -160,8 +160,6 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
     const resetToken = jwtTokens(user).refreshToken;
     console.log('Generated resetToken:', resetToken);
 
-    // Remove unnecessary cookie setting if not needed
-    // res.cookie('refresh_token', resetToken, { httpOnly: true });
 
     // Create reset password URL
     const resetUrl = `${req.protocol}://${req.get('host')}/api/v1/password/reset/${resetToken}`;
@@ -173,7 +171,7 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
       .where('id', user.id)
       .update({
         reset_password_token: resetToken,
-        reset_password_expire: new Date(Date.now() + 3600000), // Expires in 1 hour
+        reset_password_expire: new Date(Date.now() + 3600000), 
       });
     console.log('Token updated in the database');
 
