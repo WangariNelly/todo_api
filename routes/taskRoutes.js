@@ -10,11 +10,12 @@ const {
 } = require('../controllers/tasksController.js');
 
 const { AuthenticateToken } = require('../middlewares/authentication.js');
+const limiter = require('../middlewares/rate_limiter.js');
 
-router.route('/new/todo').post(createTodo);
-router.route('/fetch/todos').get(getTodos);
-router.route('/fetch/todo/:id').get(AuthenticateToken, getTodo);
-router.route('/update/todo/:id').put(AuthenticateToken, updateTodo);
-router.route('/delete/todo/:id').delete(AuthenticateToken, deleteTodo);
+router.route('/new/todo').post(AuthenticateToken, limiter, createTodo);
+router.route('/fetch/todos').get(AuthenticateToken, limiter, getTodos);
+router.route('/fetch/todo/:id').get(AuthenticateToken, limiter, getTodo);
+router.route('/update/todo/:id').put(AuthenticateToken, limiter, updateTodo);
+router.route('/delete/todo/:id').delete(AuthenticateToken, limiter, deleteTodo);
 
 module.exports = router;
