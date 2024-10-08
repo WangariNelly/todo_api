@@ -4,7 +4,7 @@
   "description": "A Todo API",
   "main": "index.js",
   "scripts": {
-    "make": "npx knex --knexfile ./db/knexfile.js migrate:make create_stored_procedure",
+    "make": "npx knex --knexfile ./db/knexfile.js migrate:make add_reset_token_to_users",
     "migrate": "npx knex  migrate:latest --knexfile db/knexfimile.js",
     "dev": "nodemon --legacy-watch server.js",
     "format": "prettier --write \"**/*.js\"",
@@ -22,6 +22,7 @@
     "crypto": "^1.0.1",
     "dotenv": "^16.4.5",
     "express": "^4.21.0",
+    "express-rate-limit": "^7.4.1",
     "express-validator": "^7.2.0",
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
@@ -32,6 +33,7 @@
     "pg": "^8.13.0",
     "pg-promise": "^11.9.1",
     "prettier": "^3.3.3",
+    "redis": "^4.7.0",
     "swagger": "^0.7.5",
     "swagger-ui-express": "^5.0.1",
     "twilio": "^5.3.2"

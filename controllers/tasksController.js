@@ -2,10 +2,11 @@ const db = require('../db/db.js');
 const todoApiFeatures = require('../utils/apiFeatures.js');
 const catchAsyncErrors = require('../middlewares/catchAsyncErrors.js');
 const ErrorHandler = require('../middlewares/errors.js');
+const limiter = require('../middlewares/rate_limiter');
 
 //create new todos
 exports.createTodo = catchAsyncErrors(async (req, res, next) => {
-  // Validate TODO existence
+  // limiter(req,res,next, async() => {
   const existingTodo = await req.db.raw(
     'SELECT EXISTS(SELECT 1 FROM todos WHERE task = ? AND user_id = ?)',
     [req.body.task, req.body.user_id],
@@ -30,6 +31,7 @@ exports.createTodo = catchAsyncErrors(async (req, res, next) => {
     todo_id: todoId.rows[0].todo_id,
   });
 });
+// });
 
 // Get all Todos
 exports.getTodos = catchAsyncErrors(async (req, res, next) => {
