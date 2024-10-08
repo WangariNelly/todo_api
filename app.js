@@ -11,15 +11,21 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const errorMiddleware = require('./middlewares/errors');
 const swaggerDefinition = require('./swagger.json');
+const { cacheMiddleware } = require('./middlewares/redis.js');
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+app.use('/api/todos', cacheMiddleware);
+
 app.use((req, res, next) => {
   req.db = db; // Add db to request object
   next(); // Move to the next middleware/route handler
 });
+
+app.use('/api/todos', cacheMiddleware);
+
 const baseUrl = '/api/v1';
 
 app.use(baseUrl, usersRoute);

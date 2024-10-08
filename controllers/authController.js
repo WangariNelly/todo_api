@@ -7,7 +7,7 @@ const ErrorHandler = require('../middlewares/errors.js');
 const catchAsyncErrors = require('../middlewares/catchAsyncErrors.js');
 const { jwtTokens } = require('../utils/jwtToken.js');
 const jwt = require('jsonwebtoken');
-const { sendEmail } = require('../utils/sendEmail.js');
+const sendEmail = require('../utils/sendEmail.js');
 
 exports.registerUser = async (req, res) => {
   const { email, password, username } = req.body;
@@ -49,14 +49,14 @@ exports.registerUser = async (req, res) => {
     };
     newUser.password = await bcrypt.hash(password, 10);
     await req.db('users').insert(newUser);
-    // return res.status(201).json({
-    //   message: 'Registration successful!',
-    // });
+    console.log('Sending email to:', newUser.email);
+
     await sendEmail({
       email: newUser.email,
       subject: 'Login successful!',
       message: 'Welcome to your todo page',
     });
+    console.log('Email sent!');
   } catch (error) {
     console.log(error);
     return res.status(500).json({
@@ -136,14 +136,13 @@ exports.logout = catchAsyncErrors(async (req, res, next) => {
 });
 
 //forgot password
-
 exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
   const { email } = req.body;
-  //validate email input
+
+  // Validate email input
   const validate = Joi.object({
     email: Joi.string().email().required(),
   });
-
   const { error } = validate.validate(req.body);
   if (error) {
     return res.status(401).json({ Error: ' Enter a valid email! ' });
@@ -152,58 +151,48 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
   // Query user by email using Knex
   try {
     const user = await req.db('users').where('email', email).first();
-
+    console.log('Queried User:', user);
     if (!user) {
       return next(new ErrorHandler('User not found with this email', 404));
     }
-  } catch (error) {
-    console.error(error); // Log the error for debugging
-    return next(new ErrorHandler('Internal server error', 500));
-  }
 
-  // Generate reset token (implement your preferred token generation logic)
-  const resetToken = jwtTokens(user).refreshToken;
-  res.cookie('refresh_token', resetToken, { httpOnly: true });
-  console.log(jwtTokens(user));
-  res.json(jwtTokens(user));
+    // Generate reset token using JWT
+    const resetToken = jwtTokens(user).refreshToken;
+    console.log('Generated resetToken:', resetToken);
 
-  // Create reset password URL
-  const resetUrl = `${req.protocol}://${req.get('host')}/api/v1/password/reset/${resetToken}`;
+    // Remove unnecessary cookie setting if not needed
+    // res.cookie('refresh_token', resetToken, { httpOnly: true });
 
-  // Update user's reset password token and expiration in the database
-  try {
+    // Create reset password URL
+    const resetUrl = `${req.protocol}://${req.get('host')}/api/v1/password/reset/${resetToken}`;
+    console.log('Reset URL:', resetUrl);
+
+    // Update user's reset password token and expiration in the database
     await req
       .db('users')
       .where('id', user.id)
       .update({
         reset_password_token: resetToken,
-        reset_password_expire: Date.now() + 3600000,
+        reset_password_expire: new Date(Date.now() + 3600000), // Expires in 1 hour
       });
-  } catch (error) {
-    console.error(error);
-    return next(new ErrorHandler('Internal server error', 500));
-  }
+    console.log('Token updated in the database');
 
-  const message = `Your password reset token is as follows:\n\n${resetUrl}\n\nIf you have not requested this email, then ignore it.`;
-
-  // Send email using Nodemailer
-  try {
+    // Create message and send email using Nodemailer
+    const message = `Your password reset token is as follows:\n\n${resetUrl}\n\nIf you have not requested this email, then ignore it.`;
     await sendEmail({
       email: user.email,
       subject: 'Todo Password Recovery',
       message,
     });
+    console.log('Email sent to:', user.email);
+
     res.status(200).json({
       success: true,
       message: `Email sent to ${user.email}`,
     });
   } catch (error) {
-    // Reset user's password reset data if email sending fails
-    await req.db('users').where('id', user.id).update({
-      reset_password_token: null,
-      reset_password_expire: null,
-    });
-    return next(new ErrorHandler('Error sending email', 500));
+    console.error('Error in forgotPassword flow:', error);
+    return next(new ErrorHandler('Internal server error', 500));
   }
 });
 
