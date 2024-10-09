@@ -7,6 +7,7 @@ const {
   getTodo,
   updateTodo,
   deleteTodo,
+  markComplete,
 } = require('../controllers/tasksController.js');
 
 const { AuthenticateToken } = require('../middlewares/authentication.js');
@@ -17,5 +18,6 @@ router.route('/fetch/todos').get(AuthenticateToken, limiter, getTodos);
 router.route('/fetch/todo/:id').get(AuthenticateToken, limiter, getTodo);
 router.route('/update/todo/:id').put(AuthenticateToken, limiter, updateTodo);
 router.route('/delete/todo/:id').delete(AuthenticateToken, limiter, deleteTodo);
+router.route('/tasks/:id/complete').patch(AuthenticateToken, markComplete);
 
 module.exports = router;

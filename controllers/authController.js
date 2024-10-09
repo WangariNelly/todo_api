@@ -8,31 +8,12 @@ const catchAsyncErrors = require('../middlewares/catchAsyncErrors.js');
 const { jwtTokens } = require('../utils/jwtToken.js');
 const jwt = require('jsonwebtoken');
 const sendEmail = require('../utils/sendEmail.js');
+const validate = require('../validations/inputValidations.js');
 
 exports.registerUser = async (req, res) => {
   const { email, password, username } = req.body;
-  console.log(req.body);
+  // console.log(req.body);
 
-  const validate = Joi.object({
-    email: Joi.string().email().required().messages({
-      'string.email': 'Invalid email format',
-      'string.required': 'Email is required',
-    }),
-    password: Joi.string()
-      .required()
-      .regex(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
-      )
-      .messages({
-        'string.required': 'Password is required',
-        'string.regex':
-          'Password must contain at least 1 digit, 1 special character, and 1 lowercase letter and 1 uppercase letter',
-      }),
-    username: Joi.string().required().min(3).messages({
-      'string.required': 'Username is required',
-      'string.min': 'Username must have a minimum of 3 characters',
-    }),
-  });
   const { error } = validate.validate(req.body);
 
   if (error) {
@@ -195,17 +176,16 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
 
 //Reset password
 exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
-  const resetPasswordTokenHash = await bcrypt.hash(req.params.token, 10);
+  const { token } = req.params;
+  console.log('Received the token..', token);
 
   const user = await req
     .db('users')
-    .where({
-      reset_password_token: resetPasswordTokenHash,
-      reset_password_expire: {
-        '>': Date.now(),
-      },
-    })
+    .where('reset_password_token', token)
+    .andWhere('reset_password_expire', '>', Date.now())
     .first();
+
+  console.log(user);
 
   if (!user) {
     return next(
@@ -217,11 +197,14 @@ exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHandler('Password does not match', 400));
   }
 
-  user.password = await bcrypt.hash(req.body.password, 10);
-  user.reset_password_token = null;
-  user.reset_password_expire = null;
+  const newPassword = await bcrypt.hash(req.body.password, 10);
 
-  await req.db('users').where({ id: user.id }).update(user);
+  await req.db('users').where({ id: user.id }).update({
+    password: newPassword,
+    reset_password_token: null,
+    reset_password_expire: null,
+  });
 
+  console.log('Password updated for user:', user.email);
   sendToken(user, 200, res);
 });
