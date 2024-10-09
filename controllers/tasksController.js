@@ -80,6 +80,35 @@ exports.updateTodo = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
+//mark task as complete
+exports.markComplete = catchAsyncErrors(async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const updatedTask = await req
+      .db('tasks')
+      .where('id', id)
+      .update({ completed: true });
+
+    if (updatedTask) {
+      res.status(200).json({
+        success: true,
+        message: 'Task marked as complete',
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        message: 'Task not found',
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Internal server error',
+    });
+  }
+});
+
 exports.deleteTodo = catchAsyncErrors(async (req, res, next) => {
   const todo = await req.db('todos').where('id', req.params.id).first();
 

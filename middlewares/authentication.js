@@ -1,20 +1,21 @@
 const jwt = require('jsonwebtoken');
-// const ErrorHandler = require('../utils/errorHandler');
 
-//checks if user is authenticated or not
 function AuthenticateToken(req, res, next) {
-  const authHeader = req.headers['authorization']; //Bearer token
+  const authHeader = req.headers['authorization']; // Bearer token
   const token = authHeader && authHeader.split(' ')[1];
-  console.log(token);
+
   if (!token) {
-    return res
-      .status(401)
-      .json({ error: 'Login first to get access resources!' });
+    return res.status(401).json({ error: 'Access denied. No token provided.' });
   }
+
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (error, user) => {
-    if (error) return res.status(403).json({ error: error.message });
+    if (error) {
+      console.log('JWT Verification Error:', error);
+      return res.status(403).json({ error: 'Invalid token.' });
+    }
+    console.log('Decoded User:', user);
     req.user = user;
-    next(); //user in payload
+    next();
   });
 }
 
