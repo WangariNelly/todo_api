@@ -11,13 +11,11 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const errorMiddleware = require('./middlewares/errors');
 const swaggerDefinition = require('./swagger.json');
-const { cacheMiddleware } = require('./middlewares/redis.js');
+const cacheMiddleware = require('./middlewares/redis.js');
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
-
-app.use('/api/todos', cacheMiddleware);
 
 app.use((req, res, next) => {
   req.db = db; // Add db to request object
@@ -37,15 +35,7 @@ app.use(
   swaggerUi.setup(swaggerDefinition),
 );
 
-// app.get('/users', async (req, res) => {
-//   try {
-//       const users = await req.db('users').select('*');
-//       res.json(users);
-//   } catch (error) {
-//       console.error('Error fetching users:', error);
-//       res.status(500).json({ error: 'Internal Server Error' });
-//   }
-// });
+
 app.use(errorMiddleware);
 
 module.exports = app;
