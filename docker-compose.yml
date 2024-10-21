@@ -1,0 +1,44 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgres://postgres:password@db:5432/tododb
+      - REDIS_URL=redis://redis:6379
+      - JWT_SECRET=your_jwt_secret
+      - REFRESH_TOKEN_SECRET=your_refresh_token_secret
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+      - redis
+    networks:
+      - todonet
+
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: tododb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - todonet
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - todonet
+
+volumes:
+  postgres_data:
+
+networks:
+  todonet:
