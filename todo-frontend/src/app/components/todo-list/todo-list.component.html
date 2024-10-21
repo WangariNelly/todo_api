@@ -1,0 +1,7 @@
+<div *ngFor="let todo of todos">
+    <h3>{{ todo.task }}</h3>
+    <p>{{ todo.description }}</p>
+    <button (click)="markComplete(todo.id)">Mark Complete</button>
+    <button (click)="deleteTodo(todo.id)">Delete</button>
+  </div>
+  
