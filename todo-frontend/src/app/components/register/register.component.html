@@ -1,0 +1,12 @@
+<!-- src/app/components/Register/register.component.html -->
+<h2>Register</h2>
+<form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+  <label>Username:</label>
+  <input formControlName="username" required />
+  <label>Email:</label>
+  <input formControlName="email" required />
+  <label>Password:</label>
+  <input type="password" formControlName="password" required />
+  <button type="submit">Register</button>
+</form>
+
