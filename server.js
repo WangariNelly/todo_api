@@ -1,6 +1,5 @@
 require('dotenv').config({ path: './config/.env' });
 
-// const knex = require('knex')(require('./db/knexfile.js'));
 const app = require('./app');
 
 app.listen(process.env.PORT, () => {
