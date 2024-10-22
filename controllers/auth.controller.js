@@ -1,12 +1,12 @@
 const express = require('express');
 const Joi = require('joi');
-const ErrorHandler = require('../middlewares/errors.js');
-const catchAsyncErrors = require('../middlewares/catchAsyncErrors.js');
-const { jwtTokens, setToken } = require('../utils/jwtToken.js');
+const ErrorHandler = require('../middlewares/errors.middleware.js');
+const catchAsyncErrors = require('../middlewares/catchAsyncErrors.middleware.js');
+const { jwtTokens, setToken } = require('../utils/jwtToken.utils.js');
 const jwt = require('jsonwebtoken');
-const sendEmail = require('../utils/sendEmail.js');
-const validate = require('../validations/inputValidations.js');
-const { comparePassword, hashPassword } = require('../utils/passwordHash');
+const sendEmail = require('../utils/sendEmail.utils.js');
+const validate = require('../validations/input.validations.js');
+const { comparePassword, hashPassword } = require('../utils/passwordHash.utils.js');
 
 exports.registerUser = catchAsyncErrors(async (req, res) => {
   const { email, password, username } = req.body;

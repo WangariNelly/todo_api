@@ -1,6 +1,6 @@
-const todoApiFeatures = require('../utils/apiFeatures.js');
-const catchAsyncErrors = require('../middlewares/catchAsyncErrors.js');
-const ErrorHandler = require('../middlewares/errors.js');
+const todoApiFeatures = require('../utils/apiFeatures.utils.js');
+const catchAsyncErrors = require('../middlewares/catchAsyncErrors.middleware.js');
+const ErrorHandler = require('../middlewares/errors.middleware.js');
 
 //create new todos
 exports.createTodo = catchAsyncErrors(async (req, res, next) => {

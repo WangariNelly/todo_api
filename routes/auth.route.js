@@ -6,9 +6,9 @@ const {
   loginUser,
   refreshedToken,
   logout,
-} = require('../controllers/authController.js');
-const { AuthenticateToken } = require('../middlewares/authentication.js');
-const { getAllUsers } = require('../controllers/usersController.js');
+} = require('../controllers/auth.controller.js');
+const { AuthenticateToken } = require('../middlewares/authentication.middleware.js');
+const { getAllUsers } = require('../controllers/users.controller.js');
 
 authRouter.post('/register', registerUser);
 authRouter.post('/login', loginUser);
