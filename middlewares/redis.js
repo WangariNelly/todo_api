@@ -27,4 +27,4 @@ const cacheMiddleware = (req, res, next) => {
   });
 };
 
-module.exports =  cacheMiddleware;
+module.exports = cacheMiddleware;

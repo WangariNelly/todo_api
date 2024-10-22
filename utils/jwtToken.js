@@ -16,4 +16,10 @@ function jwtTokens({ id, username, email }) {
   return { accessToken, refreshToken };
 }
 
-module.exports = { jwtTokens };
+function setToken(user, res) {
+  const tokens = jwtTokens(user);
+  res.cookie('refresh_token', tokens.refreshToken, { httpOnly: true });
+  res.json(tokens);
+}
+
+module.exports = { jwtTokens, setToken };

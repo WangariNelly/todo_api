@@ -1,5 +1,5 @@
 const express = require('express');
-const router = express.Router();
+const taskRouter = express.Router();
 
 const {
   createTodo,
@@ -11,13 +11,12 @@ const {
 } = require('../controllers/tasksController.js');
 
 const { AuthenticateToken } = require('../middlewares/authentication.js');
-const limiter = require('../middlewares/rate_limiter.js');
 
-router.route('/new/todo').post(AuthenticateToken, limiter, createTodo);
-router.route('/fetch/todos').get(AuthenticateToken, limiter, getTodos);
-router.route('/fetch/todo/:id').get(AuthenticateToken, limiter, getTodo);
-router.route('/update/todo/:id').put(AuthenticateToken, limiter, updateTodo);
-router.route('/delete/todo/:id').delete(AuthenticateToken, limiter, deleteTodo);
-router.route('/tasks/:id/complete').patch(AuthenticateToken, markComplete);
+taskRouter.post('/new/todo', AuthenticateToken, createTodo);
+taskRouter.get('/fetch/todos', AuthenticateToken, getTodos);
+taskRouter.get('/fetch/todo/:id', AuthenticateToken, getTodo);
+taskRouter.put('/update/todo/:id', AuthenticateToken, updateTodo);
+taskRouter.delete('/delete/todo/:id', AuthenticateToken, deleteTodo);
+taskRouter.patch('/tasks/:id/complete', AuthenticateToken, markComplete);
 
-module.exports = router;
+module.exports = taskRouter;
