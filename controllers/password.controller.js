@@ -1,14 +1,14 @@
 const express = require('express');
 const db = require('../db/db.js');
 const Joi = require('joi');
-const ErrorHandler = require('../middlewares/errors.js');
-const catchAsyncErrors = require('../middlewares/catchAsyncErrors.js');
-const { jwtTokens } = require('../utils/jwtToken.js');
+const ErrorHandler = require('../middlewares/errors.middleware.js');
+const catchAsyncErrors = require('../middlewares/catchAsyncErrors.middleware.js');
+const { jwtTokens } = require('../utils/jwtToken.utils.js');
 const jwt = require('jsonwebtoken');
-const sendEmail = require('../utils/sendEmail.js');
-const validate = require('../validations/inputValidations.js');
-const sendToken = require('../utils/sendToken.js');
-const { hashPassword } = require('../utils/passwordHash');
+const sendEmail = require('../utils/sendEmail.utils.js');
+const validate = require('../validations/input.validations.js');
+const sendToken = require('../utils/sendToken.utils.js');
+const { hashPassword } = require('../utils/passwordHash.utils.js');
 
 //forgot password
 exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {

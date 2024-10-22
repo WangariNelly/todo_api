@@ -8,9 +8,9 @@ const {
   updateTodo,
   deleteTodo,
   markComplete,
-} = require('../controllers/tasksController.js');
+} = require('../controllers/tasks.controller.js');
 
-const { AuthenticateToken } = require('../middlewares/authentication.js');
+const { AuthenticateToken } = require('../middlewares/authentication.middleware.js');
 
 taskRouter.post('/new/todo', AuthenticateToken, createTodo);
 taskRouter.get('/fetch/todos', AuthenticateToken, getTodos);
