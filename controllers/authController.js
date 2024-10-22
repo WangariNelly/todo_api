@@ -1,5 +1,4 @@
 const express = require('express');
-const db = require('../db/db.js');
 const Joi = require('joi');
 const ErrorHandler = require('../middlewares/errors.js');
 const catchAsyncErrors = require('../middlewares/catchAsyncErrors.js');

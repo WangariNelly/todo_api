@@ -1,32 +1,29 @@
-const db = require('../db/db.js');
 const todoApiFeatures = require('../utils/apiFeatures.js');
 const catchAsyncErrors = require('../middlewares/catchAsyncErrors.js');
 const ErrorHandler = require('../middlewares/errors.js');
 
 //create new todos
 exports.createTodo = catchAsyncErrors(async (req, res, next) => {
-  const existingTodo = await req.db.raw(
-    'SELECT EXISTS(SELECT 1 FROM todos WHERE task = ? AND user_id = ?)',
-    [req.body.task, req.body.user_id],
-  );
-  console.log(existingTodo);
-  if (existingTodo.rows[0].exists) {
+  const { task, completed, user_id } = req.body;
+  const existingTodo = await req.db(todos).where({ task, user_id }).first();
+
+  if (existingTodo) {
     return res.status(400).json({
       success: false,
       message: 'Todo with the same task and user already exists.',
     });
   }
+
   await req.db.raw('CALL create_todo(?, ?, ?)', [
     req.body.task,
     req.body.completed,
     req.body.user_id,
   ]);
-  const todoId = await req.db.raw('SELECT lastval() AS todo_id');
-
+  const todoId = await req.db(todos).orderBy('id', 'desc').limit(1);
   res.status(201).json({
     success: true,
     message: 'Todo created successfully!',
-    todo_id: todoId.rows[0].todo_id,
+    todo_id: todoId.id,
   });
 });
 
