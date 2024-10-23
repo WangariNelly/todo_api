@@ -1,5 +1,5 @@
 const bcrypt = require('bcryptjs');
-const ErrorHandler = require('./errorHandler');
+const ErrorHandler = require('./errorHandler.utils.js');
 
 async function hashPassword(password) {
   const salt = 10;
