@@ -1,4 +1,4 @@
-const { jwtTokens } = require('./jwtToken');
+const { jwtTokens } = require('./jwtToken.utils.js');
 
 const sendToken = (user, statusCode, res) => {
   const token = user.jwtTokens();

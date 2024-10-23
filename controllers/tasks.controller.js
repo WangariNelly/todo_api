@@ -40,6 +40,7 @@ exports.getTodos = catchAsyncErrors(async (req, res, next) => {
     success: true,
     todos,
   });
+  console.log('OK!')
 });
 
 // Get a specific Todo by ID

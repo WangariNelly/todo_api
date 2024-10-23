@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TodoService } from '../../services/todo.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-todo-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [HttpClientModule,CommonModule],
   templateUrl: './todo-list.component.html',
   styleUrl: './todo-list.component.css'
 })
@@ -18,7 +19,8 @@ export class TodoListComponent implements OnInit{
 
   loadTodos(): void {
     this.todoService.getTodos().subscribe((data) => {
-      this.todos = data;
+      this.todos = Array.isArray(data) ? data : [];
+      (error: any) => console.error('Error fetching todos', error)
     })
   }
   deleteTodo(id: number): void {
