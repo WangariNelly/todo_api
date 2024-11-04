@@ -12,6 +12,7 @@ client.on('error', (err) => {
   console.error('Redis error:', err);
 });
 
+
 const cacheMiddleware = (req, res, next) => {
   const cacheKey = `todos_${req.method}_${req.url}_${JSON.stringify(req.query)}`;
 

@@ -38,6 +38,8 @@ exports.registerUser = catchAsyncErrors(async (req, res) => {
 
 //LOGIN
 exports.loginUser = catchAsyncErrors(async (req, res, next) => {
+
+  console.log('Ok!')
   const { email, password } = req.body;
 
   if (!email || !password) {

@@ -1,0 +1,65 @@
+
+.navbar {
+    display: flex;
+    justify-content: center;
+    background-color: #333;
+    padding: 1rem;
+  }
+  
+  .navbar a {
+    color: white;
+    text-decoration: none;
+    margin: 0 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+  }
+  
+  .navbar a:hover {
+    background-color: #555;
+  }
+  
+  .navbar .active {
+    background-color: #007bff;
+    color: white;
+  }
+  
+
+  .content {
+    padding: 2rem;
+    background-color: #f4f4f4;
+    min-height: calc(100vh - 4rem); 
+  }
+
+
+ .content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+  }
+  
+  .content > * {
+    background-color: white;
+    padding: 2rem;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    width: 100%;
+    max-width: 800px;
+  }
+  
+  /* app.component.css */
+
+@media (max-width: 768px) {
+    .navbar {
+      flex-direction: column;
+    }
+    
+    .navbar a {
+      margin: 0.5rem 0;
+    }
+  
+    .content {
+      padding: 1rem;
+    } 
+  } 
