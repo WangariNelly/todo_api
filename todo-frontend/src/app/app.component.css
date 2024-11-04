@@ -1,6 +1,4 @@
-/* app.component.css */
 
-/* Navbar styling */
 .navbar {
     display: flex;
     justify-content: center;
@@ -32,10 +30,9 @@
     background-color: #f4f4f4;
     min-height: calc(100vh - 4rem); 
   }
-  
-  /* app.component.css */
 
-.content {
+
+ .content {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -64,6 +61,5 @@
   
     .content {
       padding: 1rem;
-    }
-  }
-  
+    } 
+  } 
