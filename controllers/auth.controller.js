@@ -8,33 +8,54 @@ const sendEmail = require('../utils/sendEmail.utils.js');
 const validate = require('../validations/input.validations.js');
 const { comparePassword, hashPassword } = require('../utils/passwordHash.utils.js');
 
-exports.registerUser = catchAsyncErrors(async (req, res) => {
-  const { email, password, username } = req.body;
-  const { error } = validate.validate(req.body);
 
+exports.registerUser = catchAsyncErrors(async (req, res, next) => {
+  console.log("We are in!!");
+  const { email, password, username } = req.body;
+
+  const { error } = validate.validate(req.body);
   if (error) {
-    return next(ErrorHandler(error.message, 400));
+    console.error('Validation error:', error.message);
+    return next(new ErrorHandler(error.message, 400));
   }
 
-  const newUser = {
-    email,
-    password,
-    username,
-  };
-  newUser.password = await hashPassword(password);
-  await req.db('users').insert(newUser);
+  const newUser = { email, password, username };
+  console.log('New user object created:', newUser);
 
-  await sendEmail({
-    email: newUser.email,
-    subject: 'Login successful!',
-    message: 'Welcome to your todo page',
-  });
+  try {
+    newUser.password = await hashPassword(password);
+    console.log('Password hashed successfully');
+  } catch (err) {
+    console.error('Error during password hashing:', err.message);
+    return next(new ErrorHandler("Error hashing password", 500));
+  }
 
+  try {
+    await req.db('users').insert(newUser);
+    console.log('User inserted into database successfully');
+  } catch (err) {
+    console.error('Database insertion error:', err.message);
+    return next(new ErrorHandler("Error inserting user into database", 500));
+  }
+
+  try {
+    await sendEmail({
+      email: newUser.email,
+      subject: 'Login successful!',
+      message: 'Welcome to your todo page',
+    });
+    console.log('Email sent successfully');
+  } catch (err) {
+    console.error('Error sending email:', err.message);
+  }
+
+  console.log('Registration process completed successfully');
   return res.status(201).json({
     success: true,
     message: 'User successfully registered!',
   });
 });
+
 
 //LOGIN
 exports.loginUser = catchAsyncErrors(async (req, res, next) => {

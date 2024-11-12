@@ -21,8 +21,14 @@ export class AuthService {
   }
 
   register(userData: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/register`, userData);
+    return this.http.post(`${this.apiUrl}/register`, userData).pipe(
+      catchError((error) => {
+        console.error('Registration error:', error.message);
+        return throwError(() => new Error('Registration failed.'));
+      })
+    );
   }
+  
 
   forgotPassword(email: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/forgot-password`, email);

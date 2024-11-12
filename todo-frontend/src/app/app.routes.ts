@@ -10,7 +10,7 @@ import { ResetPasswordComponent } from './components/reset-password/reset-passwo
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  // { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'register', component: RegisterComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'reset-password/:token', component: ResetPasswordComponent },
