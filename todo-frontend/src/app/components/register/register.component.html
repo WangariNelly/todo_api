@@ -1,12 +1,50 @@
 <!-- src/app/components/Register/register.component.html -->
 <h2>Register</h2>
 <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-  <label>Username:</label>
-  <input formControlName="username" required />
-  <label>Email:</label>
-  <input formControlName="email" required />
-  <label>Password:</label>
-  <input type="password" formControlName="password" required />
-  <button type="submit">Register</button>
-</form>
+  <!-- Username Field -->
+  <div>
+    <label for="username">Username:</label>
+    <input
+      id="username"
+      formControlName="username"
+      required
+      placeholder="Enter your username"
+    />
+    <div *ngIf="registerForm.get('username')?.invalid && registerForm.get('username')?.touched">
+      <small style="color: red;">Username is required.</small>
+    </div>
+  </div>
 
+  <!-- Email Field -->
+  <div>
+    <label for="email">Email:</label>
+    <input
+      id="email"
+      formControlName="email"
+      type="email"
+      required
+      placeholder="Enter your email"
+    />
+    <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+      <small style="color: red;">A valid email is required.</small>
+    </div>
+  </div>
+
+  <!-- Password Field -->
+  <div>
+    <label for="password">Password:</label>
+    <input
+      id="password"
+      type="password"
+      formControlName="password"
+      required
+      placeholder="Enter your password"
+    />
+    <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+      <small style="color: red;">Password is required.</small>
+    </div>
+  </div>
+
+  <!-- Submit Button -->
+  <button type="submit" [disabled]="registerForm.invalid">Register</button>
+</form>
