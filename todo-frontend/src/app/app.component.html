@@ -1,10 +1,11 @@
 <!-- app.component.html -->
+ <h1>Todo App</h1>
 <nav class="navbar">
-  <a routerLink="/login" routerLinkActive="active">Login</a>
-  <a routerLink="/register" routerLinkActive="active">Register</a>
-  <a routerLink="/todos" routerLinkActive="active">Todos</a>
+  <a routerLink="/login" routerLinkActive="active" ariaCurrentWhenActive="page">Login</a>
+  <a routerLink="/register" routerLinkActive="active" ariaCurrentWhenActive="page">Register</a>
+  <a routerLink="/todos" routerLinkActive="active" ariaCurrentWhenActive="page">Todos</a>
 </nav>
 
-<div class="content">
+<!-- <div class="content"> -->
   <router-outlet></router-outlet>
-</div>
+
