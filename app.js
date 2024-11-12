@@ -24,6 +24,8 @@ app.use(cookieParser());
 app.use(limiter);
 
 app.use(cors());
+app.use(cors({ origin: 'http://localhost:4200' }));
+
 
 app.use((req, res, next) => {
   req.db = db;

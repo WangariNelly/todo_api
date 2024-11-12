@@ -11,3 +11,5 @@ bootstrapApplication(AppComponent, {
     importProvidersFrom(HttpClientModule),
   ],
 });
+
+

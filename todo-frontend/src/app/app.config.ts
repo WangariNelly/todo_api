@@ -8,7 +8,7 @@
 //   providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes), provideClientHydration()]
 // };
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
 import { provideClientHydration } from '@angular/platform-browser';
 import { importProvidersFrom } from '@angular/core';
@@ -21,7 +21,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }), 
     provideHttpClient(withFetch()),
-    provideRouter(routes), 
+    provideRouter(routes, withComponentInputBinding()), 
     provideClientHydration(),
     provideHttpClient(),
     importProvidersFrom(ReactiveFormsModule)  
