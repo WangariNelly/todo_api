@@ -29,6 +29,7 @@ exports.createTodo = catchAsyncErrors(async (req, res, next) => {
 
 // Get all Todos
 exports.getTodos = catchAsyncErrors(async (req, res, next) => {
+  console.log("We in!!")
   const resultPerPage = 5;
   const todoFeatures = new todoApiFeatures(req.db('todos'), req.query)
     .search()

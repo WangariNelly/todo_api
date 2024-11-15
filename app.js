@@ -4,6 +4,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
+const path = require('path');
 
 const swaggerUi = require('swagger-ui-express');
 
@@ -24,8 +25,7 @@ app.use(cookieParser());
 app.use(limiter);
 
 app.use(cors());
-app.use(cors({ origin: 'http://localhost:4200' }));
-
+app.use(cors({ origin: '*' }));
 
 app.use((req, res, next) => {
   req.db = db;
@@ -45,6 +45,15 @@ app.use(
   swaggerUi.serve,
   swaggerUi.setup(swaggerDefinition),
 );
+
+// Serve static files from the Angular app
+app.use(express.static(path.join(__dirname, 'todo-frontend/dist')));
+
+// Catch-all route to serve Angular app for any unmatched routes
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'todo-frontend/dist/index.html'));
+});
+
 
 app.use(errorMiddleware);
 
