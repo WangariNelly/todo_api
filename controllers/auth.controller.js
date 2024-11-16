@@ -6,36 +6,34 @@ const { jwtTokens, setToken } = require('../utils/jwtToken.utils.js');
 const jwt = require('jsonwebtoken');
 const sendEmail = require('../utils/sendEmail.utils.js');
 const validate = require('../validations/input.validations.js');
-const { comparePassword, hashPassword } = require('../utils/passwordHash.utils.js');
+const {
+  comparePassword,
+  hashPassword,
+} = require('../utils/passwordHash.utils.js');
+const { TokenInstance } = require('twilio/lib/rest/oauth/v1/token.js');
 
-
+//register
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
-  console.log("We are in!!");
+  console.log('We are in!!');
   const { email, password, username } = req.body;
 
   const { error } = validate.validate(req.body);
   if (error) {
-    console.error('Validation error:', error.message);
     return next(new ErrorHandler(error.message, 400));
   }
 
   const newUser = { email, password, username };
-  console.log('New user object created:', newUser);
 
   try {
     newUser.password = await hashPassword(password);
-    console.log('Password hashed successfully');
   } catch (err) {
-    console.error('Error during password hashing:', err.message);
-    return next(new ErrorHandler("Error hashing password", 500));
+    return next(new ErrorHandler('Error hashing password', 500));
   }
 
   try {
     await req.db('users').insert(newUser);
-    console.log('User inserted into database successfully');
   } catch (err) {
-    console.error('Database insertion error:', err.message);
-    return next(new ErrorHandler("Error inserting user into database", 500));
+    return next(new ErrorHandler('Error inserting user into database', 500));
   }
 
   try {
@@ -49,18 +47,15 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
     console.error('Error sending email:', err.message);
   }
 
-  console.log('Registration process completed successfully');
   return res.status(201).json({
     success: true,
     message: 'User successfully registered!',
   });
 });
 
-
 //LOGIN
 exports.loginUser = catchAsyncErrors(async (req, res, next) => {
-
-  console.log('Ok!')
+  console.log('Ok!');
   const { email, password } = req.body;
 
   if (!email || !password) {
@@ -68,17 +63,20 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
       .status(400)
       .json({ error: 'Please enter a valid email and password!' });
   }
+
   const user = await req
     .db('users')
     .select('email', 'password')
     .where('email', email)
     .first();
 
+  console.log('We got here too');
   if (!user) {
     return next(new ErrorHandler('Invalid email or password', 401));
   }
 
   await comparePassword(password, user.password);
+  console.log(password);
   return setToken(user, res);
 });
 

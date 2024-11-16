@@ -18,6 +18,7 @@ function jwtTokens({ id, username, email }) {
 
 function setToken(user, res) {
   const tokens = jwtTokens(user);
+  console.log("Generated Token:", tokens);
   res.cookie('refresh_token', tokens.refreshToken, { httpOnly: true });
   res.json(tokens);
 }

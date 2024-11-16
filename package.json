@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
   
-  "make": "npx knex --knexfile ./db/knexfile.js migrate:make users",
+  "make": "npx knex --knexfile ./db/knexfile.js migrate:make storedProcedure",
   "migrate": "npx knex migrate:latest --knexfile ./db/knexfile.js",
   "rollback": "npx knex migrate:rollback --all --knexfile ./db/knexfile.js",
   "db:reset": "npx knex migrate:rollback --all && npx knex migrate:latest --knexfile ./db/knexfile.js",

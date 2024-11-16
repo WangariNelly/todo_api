@@ -20,7 +20,7 @@
 		}
 	  },
 	"paths": {
-	  "/login": {
+	  "/auth/login": {
 		"post": {
 		  "tags": ["Login User"],
 		  "summary": "Logs the user into the system",
@@ -118,7 +118,7 @@
 		  }
 		}
 	  },
-	  "/register": {
+	  "/auth/register": {
 		"post": {
 		  "tags": ["Create new user"],
 		  "summary": "User registration",
