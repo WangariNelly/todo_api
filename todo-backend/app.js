@@ -24,14 +24,14 @@ app.use(cookieParser());
 
 app.use(limiter);
 
-const corsOptions = {
-  origin: 'http://localhost:4200',  // Allow requests only from this origin
-  methods: 'GET,POST,PUT,DELETE',  // Allow specific methods
-  allowedHeaders: 'Content-Type',  // Allow specific headers
-};
+// const corsOptions = {
+//   origin: 'http://localhost:4200',  // Allow requests only from this origin
+//   methods: 'GET,POST,PUT,DELETE',  // Allow specific methods
+//   allowedHeaders: 'Content-Type',  // Allow specific headers
+// };
 
-app.use(cors());
-app.use(cors({ corsOptions}));
+// app.use(cors());
+app.use(cors( 'origin *'));
 
 app.use((req, res, next) => {
   req.db = db;
