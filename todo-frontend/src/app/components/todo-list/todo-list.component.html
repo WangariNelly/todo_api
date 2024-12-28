@@ -1,9 +1,22 @@
-<div class="todo-list-container">
-  <h2>Your Todo List</h2>
+<div class="todo-container">
+  <h2>Your Tasks</h2>
   
-  <div *ngIf="todos.length > 0; else noTodos">
+  <!-- Todo Form for adding/editing -->
+  <form [formGroup]="todoForm" (ngSubmit)="onSubmit()">
+    <label for="task">Task:</label>
+    <input type="text" formControlName="task" id="task" placeholder="Enter task" />
+    
+    <button type="submit">{{ isEditing ? 'Update Todo' : 'Add Todo' }}</button>
+    <button *ngIf="isEditing" type="button" (click)="resetForm()">Cancel</button>
+  </form>
+
+  <!-- <div>{{ todos | json }}</div>  -->
+
+  <!-- Todo List -->
+  <div *ngIf="todos.length > 0;">
     <ul class="todo-list">
       <li *ngFor="let todo of todos" class="todo-item">
+        {{ todo | json }} 
         <div class="todo-info">
           <input 
             type="checkbox" 
@@ -16,16 +29,13 @@
           </span>
         </div>
         
-        <button 
-          (click)="deleteTodo(todo.id)" 
-          class="delete-btn">
-          Delete
-        </button>
+        <button (click)="editTodo(todo.id)" class="edit-btn">Edit</button>
+        <button (click)="deleteTodo(todo.id)" class="delete-btn">Delete</button>
       </li>
     </ul>
   </div>
 
-  <ng-template #noTodos>
-    <p>No todos available. Please add some!</p>
-  </ng-template>
+  <!-- <ng-template #noTodos>
+    <p>No tasks available. Please add some!</p>
+  </ng-template> -->
 </div>

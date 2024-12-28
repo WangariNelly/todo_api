@@ -1,0 +1,21 @@
+{
+    "version": 2,
+    "builds": [
+      {
+        "src": "todo-backend/server.js", 
+        "use": "@vercel/node",       
+        "config": {
+          "maxLambdaSize": "100mb"     
+        }
+      },
+      {
+        "src": "frontend/dist/your-angular-app/**/*", 
+        "use": "@vercel/static"        
+      }
+    ],
+    "env": {
+      "DATABASE_URL": "your-database-url",
+      "JWT_SECRET": "your-jwt-secret"
+    }
+  }
+  

@@ -1,74 +1,99 @@
-.todo-list-container {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  h2 {
-    font-size: 24px;
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
-  .todo-list {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  .todo-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    border-bottom: 1px solid #ccc;
-    transition: background-color 0.3s;
-  }
-  
-  .todo-item:hover {
-    background-color: #f9f9f9;
-  }
-  
-  .todo-info {
-    display: flex;
-    align-items: center;
-  }
-  
-  .checkbox {
-    margin-right: 10px;
-  }
-  
-  .task-name {
-    font-size: 18px;
-    color: #333;
-    transition: text-decoration 0.3s;
-  }
-  
-  .task-name.completed {
-    text-decoration: line-through;
-    color: #888;
-  }
-  
-  .delete-btn {
-    background-color: #ff6b6b;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    font-size: 14px;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-  }
-  
-  .delete-btn:hover {
-    background-color: #ff4d4d;
-  }
-  
-  .no-todos {
-    font-size: 16px;
-    color: #555;
-    text-align: center;
-  }
-  
+.todo-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+label {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+input, textarea {
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  padding: 8px 15px;
+  border: none;
+  border-radius: 4px;
+  background-color: #4CAF50;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+button[type="button"] {
+  background-color: #f44336;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+.todo-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.todo-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  margin: 10px 0;
+}
+
+.checkbox {
+  margin-right: 10px;
+}
+
+.task-name {
+  flex-grow: 1;
+  font-size: 16px;
+}
+
+.task-name.completed {
+  text-decoration: line-through;
+}
+
+.edit-btn, .delete-btn {
+  padding: 6px 12px;
+  font-size: 12px;
+  color: white;
+  background-color: #008CBA;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.edit-btn {
+  background-color: #4CAF50;
+}
+
+.delete-btn {
+  background-color: #f44336;
+}
+
+.edit-btn:hover, .delete-btn:hover {
+  opacity: 0.8;
+}
