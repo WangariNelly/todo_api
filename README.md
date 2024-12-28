@@ -31,4 +31,26 @@ This API provides endpoints for creating, retrieving, updating, and deleting tod
 
 - Adjust the database connection details in your .env file to match your PostgreSQL configuration. 
 
-P@ssw0rd!
+## Environment Variables
+
+The application requires specific environment variables to be set up for proper functioning. Below are the variables and their purposes:
+
+| **Variable Name**         | **Description**                                  |
+|----------------------------|------------------------------------------------|
+| `PORT`                    | The port on which the server runs (e.g., 3000). |
+| `NODE_ENV`                | The environment mode (e.g., development, production). |
+| `ACCESS_TOKEN_SECRET`     | Secret key used for generating access tokens.   |
+| `REFRESH_TOKEN_SECRET`    | Secret key used for generating refresh tokens.  |
+| `JWT_ACCESS_EXPIRE`       | Expiry duration for JWT access tokens.          |
+| `JWT_REFRESH_EXPIRE`      | Expiry duration for JWT refresh tokens.         |
+| `SMTP_HOST`               | SMTP server host for sending emails.           |
+| `SMTP_PORT`               | SMTP server port for sending emails.           |
+| `SMTP_PASSWORD`           | Password for the SMTP server.                   |
+| `SMTP_FROM_NAME`          | Sender's name in the email.                     |
+| `SMTP_FROM_EMAIL`         | Sender's email address.                         |
+| `DB_HOST`                 | Hostname for the database (e.g., localhost).    |
+| `DB_USER`                 | Database user name.                             |
+| `DB_PASSWORD`             | Password for the database user.                 |
+| `DB_NAME`                 | Name of the database.                           |
+| `DB_PORT`                 | Port on which the database runs.                |
+
