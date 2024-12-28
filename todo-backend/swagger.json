@@ -1,0 +1,1017 @@
+{
+	"openapi": "3.0.3",
+	"info": {
+	  "title": "Todo API",
+	  "description": "A todo application",
+	  "version": "1.0.0"
+	},
+	"servers": [
+	  {
+		"url": "http://localhost:3000/api/v1"
+	  }
+	],
+	"components": {
+		"securitySchemes": {
+		  "BearerAuth": {
+			"type": "http",
+			"scheme": "bearer",
+			"bearerFormat": "JWT"
+		  }
+		}
+	  },
+	"paths": {
+	  "/auth/login": {
+		"post": {
+		  "tags": ["Login User"],
+		  "summary": "Logs the user into the system",
+		  "description": "Logs in the user with credentials provided, sends token to authorize",
+		  "requestBody": {
+			"required": true,
+			"content": {
+			  "application/json": {
+				"schema": {
+				  "type": "object",
+				  "properties": {
+					"email": {
+					  "type": "string",
+					  "example": "example@example.com",
+					  "description": "User's email address",
+					  "minLength": 1,
+					  "format": "email"
+					},
+					"password": {
+					  "type": "string",
+					  "example": "P@ssw0rd!",
+					  "description": "User's password",
+					  "minLength": 8
+					}
+				  },
+				  "required": [
+					"email",
+					"password"
+				  ]
+				}
+			  }
+			}
+		  },
+		  "responses": {
+			"200": {
+			  "description": "Success",
+			  "content": {
+				"application/json": {
+				  "schema": {
+					"type": "object",
+					"properties": {
+					  "success": {
+						"type": "boolean",
+						"example": true
+					  },
+					  "message": {
+						"type": "string",
+						"example": "Token:"
+					  }
+					}
+				  }
+				}
+			  }
+			},
+			"500": {
+			  "description": "Internal Server Error",
+			  "content": {
+				"application/json": {
+				  "schema": {
+					"type": "object",
+					"properties": {
+					  "success": {
+						"type": "boolean",
+						"example": false
+					  },
+					  "message": {
+						"type": "string",
+						"example": "Internal Server error!"
+					  }
+					}
+				  }
+				}
+			  }
+			},
+			"503": {
+			  "description": "Service Unavailable!",
+			  "content": {
+				"application/json": {
+				  "schema": {
+					"type": "object",
+					"properties": {
+					  "success": {
+						"type": "boolean",
+						"example": false
+					  },
+					  "message": {
+						"type": "string",
+						"example": "Todo API is down!"
+					  }
+					}
+				  }
+				}
+			  }
+			}
+		  }
+		}
+	  },
+	  "/auth/register": {
+		"post": {
+		  "tags": ["Create new user"],
+		  "summary": "User registration",
+		  "description": "Registers user and validates input data from the user",
+		  "requestBody": {
+			"required": true,
+			"content": {
+			  "application/json": {
+				"schema": {
+				  "type": "object",
+				  "properties": {
+					"email": {
+					  "type": "string",
+					  "example": "example@example.com",
+					  "description": "User's email address",
+					  "minLength": 1,
+					  "format": "email"
+					},
+					"username": {
+					  "type": "string",
+					  "example": "John",
+					  "description": "User's names"
+					},
+					"password": {
+					  "type": "string",
+					  "example": "P@ssw0rd!",
+					  "description": "User's password",
+					  "minLength": 8
+					}
+				  },
+				  "required": [
+					"email",
+					"username",
+					"password"
+				  ]
+				}
+			  }
+			}
+		  },
+		  "responses": {
+			"201": {
+			  "description": "Created!",
+			  "content": {
+				"application/json": {
+				  "schema": {
+					"type": "object",
+					"properties": {
+					  "success": {
+						"type": "boolean",
+						"example": true
+					  },
+					  "message": {
+						"type": "string",
+						"example": "Registration successful!"
+					  }
+					}
+				  }
+				}
+			  }
+			},
+			"500": {
+			  "description": "Internal Server Error",
+			  "content": {
+				"application/json": {
+				  "schema": {
+					"type": "object",
+					"properties": {
+					  "success": {
+						"type": "boolean",
+						"example": false
+					  },
+					  "message": {
+						"type": "string",
+						"example": "Internal Server error!"
+					  }
+					}
+				  }
+				}
+			  }
+			},
+			"400": {
+			  "description": "Invalid request data",
+			  "content": {
+				"application/json": {
+				  "schema": {
+					"type": "object",
+					"properties": {
+					  "success": {
+						"type": "boolean",
+						"example": false
+					  },
+					  "errors": {
+						"type": "array",
+						"items": {
+						  "type": "string"
+						},
+						"example": [
+						  "Request body is empty, Try again!",
+						  "Email is required!",
+						  "FirstName must have a minimum of 3 characters!",
+						  "Password must contain at least 1 digit, 1 special character, 1 lowercase letter and 1 uppercase letter"
+						]
+					  }
+					}
+				  }
+				}
+			  }
+			},
+			"503": {
+			  "description": "Service Unavailable!",
+			  "content": {
+				"application/json": {
+				  "schema": {
+					"type": "object",
+					"properties": {
+					  "success": {
+						"type": "boolean",
+						"example": false
+					  },
+					  "message": {
+						"type": "string",
+						"example": "Application failed to process the request"
+					  }
+					}
+				  }
+				}
+			  }
+			}
+		  }
+		}
+	  },
+	  "/tasks/new/todo": {
+		"post": {
+		  "tags": ["Create new task"],
+		  "summary": "Task create",
+		  "description": "Creates new tasks on your todo list",
+		  "security": [
+			{
+			  "BearerAuth": []
+			}
+		  ],
+		  "requestBody": {
+			"required": true,
+			"content": {
+			  "application/json": {
+				"schema": {
+				  "type": "object",
+				  "properties": {
+					"task": {
+					  "type": "string",
+					  "example": "Code",
+					  "description": "Task to be done",
+					  "minLength": 1
+					},
+					"completed": {
+					  "type": "boolean",
+					  "example": false,
+					  "description": "Shows task status"
+					},
+					"user_id": {
+					  "type": "integer",
+					  "example": 1,
+					  "description": "User's id from the user table",
+					  "minLength": 1
+					}
+				  },
+				  "required": [
+					"task",
+					"completed",
+					"user_id"
+				  ]
+				}
+			  }
+			}
+		  },
+		  "responses": {
+			"201": {
+			  "description": "Created!",
+			  "content": {
+				"application/json": {
+				  "schema": {
+					"type": "object",
+					"properties": {
+					  "success": {
+						"type": "boolean",
+						"example": true
+					  },
+					  "message": {
+						"type": "string",
+						"example": "Todo created successfully!"
+					  }
+					}
+				  }
+				}
+			  }
+			},
+			"500": {
+			  "description": "Internal Server Error",
+			  "content": {
+				"application/json": {
+				  "schema": {
+					"type": "object",
+					"properties": {
+					  "success": {
+						"type": "boolean",
+						"example": false
+					  },
+					  "message": {
+						"type": "string",
+						"example": "Internal Server error!"
+					  }
+					}
+				  }
+				}
+			  }
+			},
+			"400": {
+			  "description": "Invalid request data",
+			  "content": {
+				"application/json": {
+				  "schema": {
+					"type": "object",
+					"properties": {
+					  "success": {
+						"type": "boolean",
+						"example": false
+					  },
+					  "errors": {
+						"type": "array",
+						"items": {
+						  "type": "string"
+						},
+						"example": [
+						  "Request body is empty, Try again!",
+						  "user_id is required!"
+						]
+					  }
+					}
+				  }
+				}
+			  }
+			},
+			"503": {
+			  "description": "Service Unavailable!",
+			  "content": {
+				"application/json": {
+				  "schema": {
+					"type": "object",
+					"properties": {
+					  "success": {
+						"type": "boolean",
+						"example": false
+					  },
+					  "message": {
+						"type": "string",
+						"example": "Application failed to process the request"
+					  }
+					}
+				  }
+				}
+			  }
+			}
+		  }
+		}
+	  },
+	  "/tasks/fetch/todos": {
+		"get": {
+		  "tags": ["Get all Todos"],
+		  "summary": "Get all Todos",
+		  "description": "Fetches all todos",
+		  "responses": {
+			"200": {
+			  "description": "A list of todos",
+			  "security": [
+				{
+				  "BearerAuth": []
+				}
+			  ],
+			  "content": {
+				"application/json": {
+				  "schema": {
+					"type": "object",
+					"properties": {
+					  "success": {
+						"type": "boolean",
+						"example": true
+					  },
+					  "todos": {
+						"type": "array",
+						"items": {
+						  "type": "object",
+						  "properties": {
+							"id": {
+							  "type": "integer"
+							},
+							"task": {
+							  "type": "string"
+							},
+							"completed": {
+							  "type": "boolean"
+							}
+						  }
+						}
+					  }
+					}
+				  }
+				}
+			  }
+			},
+			"500": {
+			  "description": "Internal Server Error"
+			}
+		  }
+		}
+	  },
+	  "/tasks/fetch/todo/:id": {
+		"get": {
+		  "tags": ["Get a single Todo"],
+		  "summary": "Get a specific Todo",
+		  "description": "Fetches a single todo by its ID",
+		  "parameters": [
+			{
+			  "name": "id",
+			  "in": "path",
+			  "required": true,
+			  "description": "ID of the todo to fetch",
+			  "security": [
+				{
+				  "BearerAuth": []
+				}
+			  ],
+			  "schema": {
+				"type": "integer"
+			  }
+			}
+		  ],
+		  "responses": {
+			"200": {
+			  "description": "Todo found",
+			  "content": {
+				"application/json": {
+				  "schema": {
+					"type": "object",
+					"properties": {
+					  "success": {
+						"type": "boolean",
+						"example": true
+					  },
+					  "todo": {
+						"type": "object",
+						"properties": {
+						  "id": {
+							"type": "integer"
+						  },
+						  "task": {
+							"type": "string"
+						  },
+						  "completed": {
+							"type": "boolean"
+						  }
+						}
+					  }
+					}
+				  }
+				}
+			  }
+			},
+			"404": {
+			  "description": "Todo not found",
+			  "content": {
+				"application/json": {
+				  "schema": {
+					"type": "object",
+					"properties": {
+					  "success": {
+						"type": "boolean",
+						"example": false
+					  },
+					  "message": {
+						"type": "string",
+						"example": "Todo not found!"
+					  }
+					}
+				  }
+				}
+			  }
+			},
+			"500": {
+			  "description": "Internal Server Error"
+			}
+		  }
+		}
+	  },
+	  "/tasks/update/todo/:id": {
+		"put": {
+		  "tags": ["Update Todo"],
+		  "summary": "Update an existing Todo",
+		  "description": "Updates the task and status of a todo",
+		  "parameters": [
+			{
+			  "name": "id",
+			  "in": "path",
+			  "required": true,
+			  "description": "ID of the todo to update",
+			  "security": [
+				{
+				  "BearerAuth": []
+				}
+			  ],
+			  "schema": {
+				"type": "integer"
+			  }
+			}
+		  ],
+		  "requestBody": {
+			"required": true,
+			"content": {
+			  "application/json": {
+				"schema": {
+				  "type": "object",
+				  "properties": {
+					"task": {
+					  "type": "string",
+					  "example": "Code",
+					  "description": "Updated task to be done",
+					  "minLength": 1
+					},
+					"completed": {
+					  "type": "boolean",
+					  "example": false,
+					  "description": "Updated task status"
+					}
+				  },
+				  "required": [
+					"task",
+					"completed"
+				  ]
+				}
+			  }
+			}
+		  },
+		  "responses": {
+			"200": {
+			  "description": "Updated!",
+			  "content": {
+				"application/json": {
+				  "schema": {
+					"type": "object",
+					"properties": {
+					  "success": {
+						"type": "boolean",
+						"example": true
+					  },
+					  "message": {
+						"type": "string",
+						"example": "Todo updated successfully!"
+					  }
+					}
+				  }
+				}
+			  }
+			},
+			"404": {
+			  "description": "Todo not found",
+			  "content": {
+				"application/json": {
+				  "schema": {
+					"type": "object",
+					"properties": {
+					  "success": {
+						"type": "boolean",
+						"example": false
+					  },
+					  "message": {
+						"type": "string",
+						"example": "Todo not found!"
+					  }
+					}
+				  }
+				}
+			  }
+			},
+			"500": {
+			  "description": "Internal Server Error"
+			}
+		  }
+		}
+	  },
+	  "/tasks/:id/complete": {
+		"put": {
+		  "tags": ["Mark Todo as Complete"],
+		  "summary": "Mark a Todo as complete",
+		  "description": "Marks a todo as completed",
+		  "parameters": [
+			{
+			  "name": "id",
+			  "in": "path",
+			  "required": true,
+			  "description": "ID of the todo to mark as complete",
+			  "security": [
+				{
+				  "BearerAuth": []
+				}
+			  ],
+			  "schema": {
+				"type": "integer"
+			  }
+			}
+		  ],
+		  "responses": {
+			"200": {
+			  "description": "Marked as complete!",
+			  "content": {
+				"application/json": {
+				  "schema": {
+					"type": "object",
+					"properties": {
+					  "success": {
+						"type": "boolean",
+						"example": true
+					  },
+					  "message": {
+						"type": "string",
+						"example": "Todo marked as complete!"
+					  }
+					}
+				  }
+				}
+			  }
+			},
+			"404": {
+			  "description": "Todo not found",
+			  "content": {
+				"application/json": {
+				  "schema": {
+					"type": "object",
+					"properties": {
+					  "success": {
+						"type": "boolean",
+						"example": false
+					  },
+					  "message": {
+						"type": "string",
+						"example": "Todo not found!"
+					  }
+					}
+				  }
+				}
+			  }
+			},
+			"500": {
+			  "description": "Internal Server Error"
+			}
+		  }
+		}
+	  },
+	  "tasks/delete/todo/:id": {
+		"delete": {
+		  "tags": ["Delete Todo"],
+		  "summary": "Delete a Todo",
+		  "description": "Deletes a specific todo by its ID",
+		  "parameters": [
+			{
+			  "name": "id",
+			  "in": "path",
+			  "required": true,
+			  "description": "ID of the todo to delete",
+			  "security": [
+				{
+				  "BearerAuth": []
+				}
+			  ],
+			  "schema": {
+				"type": "integer"
+			  }
+			}
+		  ],
+		  "responses": {
+			"200": {
+			  "description": "Deleted!",
+			  "content": {
+				"application/json": {
+				  "schema": {
+					"type": "object",
+					"properties": {
+					  "success": {
+						"type": "boolean",
+						"example": true
+					  },
+					  "message": {
+						"type": "string",
+						"example": "Todo deleted successfully!"
+					  }
+					}
+				  }
+				}
+			  }
+			},
+			"404": {
+			  "description": "Todo not found",
+			  "content": {
+				"application/json": {
+				  "schema": {
+					"type": "object",
+					"properties": {
+					  "success": {
+						"type": "boolean",
+						"example": false
+					  },
+					  "message": {
+						"type": "string",
+						"example": "Todo not found!"
+					  }
+					}
+				  }
+				}
+			  }
+			},
+			"500": {
+			  "description": "Internal Server Error"
+			}
+		  }
+		}
+	  },
+	  "password/refreshToken": {
+		"post": {
+		  "tags": ["Refresh Token"],
+		  "summary": "Refresh user token",
+		  "description": "Refreshes the user's access token using the refresh token",
+		  "responses": {
+			"200": {
+			  "description": "Token refreshed",
+			  "content": {
+				"application/json": {
+				  "schema": {
+					"type": "object",
+					"properties": {
+					  "success": {
+						"type": "boolean",
+						"example": true
+					  },
+					  "accessToken": {
+						"type": "string",
+						"example": "newAccessToken"
+					  },
+					  "refreshToken": {
+						"type": "string",
+						"example": "newRefreshToken"
+					  }
+					}
+				  }
+				}
+			  }
+			},
+			"401": {
+			  "description": "Unauthorized",
+			  "content": {
+				"application/json": {
+				  "schema": {
+					"type": "object",
+					"properties": {
+					  "error": {
+						"type": "string",
+						"example": "Not refreshed"
+					  }
+					}
+				  }
+				}
+			  }
+			},
+			"403": {
+			  "description": "Forbidden",
+			  "content": {
+				"application/json": {
+				  "schema": {
+					"type": "object",
+					"properties": {
+					  "error": {
+						"type": "string",
+						"example": "Invalid refresh token"
+					  }
+					}
+				  }
+				}
+			  }
+			},
+			"500": {
+			  "description": "Internal Server Error"
+			}
+		  }
+		}
+	  },
+	  "password/logout": {
+		"post": {
+		  "tags": ["Logout User"],
+		  "summary": "Logs the user out of the system",
+		  "description": "Clears the cookies associated with the user session",
+		  "responses": {
+			"200": {
+			  "description": "User logged out",
+			  "content": {
+				"application/json": {
+				  "schema": {
+					"type": "object",
+					"properties": {
+					  "success": {
+						"type": "boolean",
+						"example": true
+					  },
+					  "message": {
+						"type": "string",
+						"example": "Logged Out"
+					  }
+					}
+				  }
+				}
+			  }
+			},
+			"500": {
+			  "description": "Internal Server Error"
+			}
+		  }
+		}
+	  },
+	  "/password/forgot": {
+		"post": {
+		  "tags": ["Forgot Password"],
+		  "summary": "Request password reset",
+		  "description": "Sends a password reset link to the user's email",
+		  "requestBody": {
+			"required": true,
+			"content": {
+			  "application/json": {
+				"schema": {
+				  "type": "object",
+				  "properties": {
+					"email": {
+					  "type": "string",
+					  "example": "nellywangarikamenya@gmail.com"
+					}
+				  },
+				  "required": ["email"]
+				}
+			  }
+			},
+			"responses": {
+			  "200": {
+				"description": "Email sent",
+				"content": {
+				  "application/json": {
+					"schema": {
+					  "type": "object",
+					  "properties": {
+						"success": {
+						  "type": "boolean",
+						  "example": true
+						},
+						"message": {
+						  "type": "string",
+						  "example": "Email sent to user@example.com"
+						}
+					  }
+					}
+				  }
+				}
+			  },
+			  "401": {
+				"description": "Invalid email format",
+				"content": {
+				  "application/json": {
+					"schema": {
+					  "type": "object",
+					  "properties": {
+						"Error": {
+						  "type": "string",
+						  "example": "Enter a valid email!"
+						}
+					  }
+					}
+				  }
+				}
+			  },
+			  "404": {
+				"description": "User not found",
+				"content": {
+				  "application/json": {
+					"schema": {
+					  "type": "object",
+					  "properties": {
+						"success": {
+						  "type": "boolean",
+						  "example": false
+						},
+						"message": {
+						  "type": "string",
+						  "example": "User not found with this email"
+						}
+					  }
+					}
+				  }
+				}
+			  },
+			  "500": {
+				"description": "Internal Server Error"
+			  }
+			}
+		  }
+		},
+	  "/password/reset/{token}": {
+		"put": {
+		  "tags": ["Reset Password"],
+		  "summary": "Reset user password",
+		  "description": "Resets the user's password using the provided token",
+		  "parameters": [
+			{
+			  "name": "token",
+			  "in": "path",
+			  "required": true,
+			  "description": "Password reset token",
+			  "schema": {
+				"type": "string"
+			  }
+			}
+		  ],
+		  "requestBody": {
+			"required": true,
+			"content": {
+			  "application/json": {
+				"schema": {
+				  "type": "object",
+				  "properties": {
+					"password": {
+					  "type": "string",
+					  "example": "newPassword123"
+					},
+					"confirmPassword": {
+					  "type": "string",
+					  "example": "newPassword123"
+					}
+				  },
+				  "required": ["password", "confirmPassword"]
+				}
+			  }
+			},
+			"responses": {
+			  "200": {
+				"description": "Password reset successful",
+				"content": {
+				  "application/json": {
+					"schema": {
+					  "type": "object",
+					  "properties": {
+						"success": {
+						  "type": "boolean",
+						  "example": true
+						},
+						"message": {
+						  "type": "string",
+						  "example": "Password updated successfully!"
+						}
+					  }
+					}
+				  }
+				}
+			  },
+			  "400": {
+				"description": "Invalid token or password mismatch",
+				"content": {
+				  "application/json": {
+					"schema": {
+					  "type": "object",
+					  "properties": {
+						"success": {
+						  "type": "boolean",
+						  "example": false
+						},
+						"message": {
+						  "type": "string",
+						  "example": "Password token is Invalid or has expired"
+						}
+					  }
+					}
+				  }
+				}
+			  },
+			  "500": {
+				"description": "Internal Server Error"
+			  }
+			}
+		  }
+		}
+	  }
+	}
+  } 
+}
+  

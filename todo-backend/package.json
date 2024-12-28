@@ -1,0 +1,45 @@
+{
+  "name": "todo-api",
+  "version": "1.0.0",
+  "description": "A Todo API",
+  "main": "index.js",
+  "scripts": {
+  
+  "make": "npx knex --knexfile ./db/knexfile.js migrate:make storedProcedure",
+  "migrate": "npx knex migrate:latest --knexfile ./db/knexfile.js",
+  "rollback": "npx knex migrate:rollback --all --knexfile ./db/knexfile.js",
+  "db:reset": "npx knex migrate:rollback --all && npx knex migrate:latest --knexfile ./db/knexfile.js",
+
+    "dev": "nodemon --legacy-watch server.js",
+    "format": "prettier --write \"**/*.js\"",
+    "format-check": "prettier --check \"**/*.js\"",
+    "serve": " start http://localhost:3000/api/v1/swagger/#/",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Nelly Wangari Kamenya",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.3",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "express-rate-limit": "^7.4.1",
+    "express-validator": "^7.2.0",
+    "joi": "^17.13.3",
+    "jsonwebtoken": "^9.0.2",
+    "knex": "^3.1.0",
+    "lodash": "^4.17.21",
+    "nodemailer": "^6.9.15",
+    "nodemon": "^3.1.7",
+    "pg": "^8.13.0",
+    "pg-promise": "^11.9.1",
+    "prettier": "^3.3.3",
+    "redis": "^4.7.0",
+    "swagger": "^0.7.5",
+    "swagger-ui-express": "^5.0.1",
+    "twilio": "^5.3.2"
+  }
+}
