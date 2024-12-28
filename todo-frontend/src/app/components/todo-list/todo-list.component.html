@@ -1,7 +1,31 @@
-<div *ngFor="let todo of todos">
-    <h3>{{ todo.task }}</h3>
-    <p>{{ todo.description }}</p>
-    <button (click)="markComplete(todo.id)">Mark Complete</button>
-    <button (click)="deleteTodo(todo.id)">Delete</button>
-  </div>
+<div class="todo-list-container">
+  <h2>Your Todo List</h2>
   
+  <div *ngIf="todos.length > 0; else noTodos">
+    <ul class="todo-list">
+      <li *ngFor="let todo of todos" class="todo-item">
+        <div class="todo-info">
+          <input 
+            type="checkbox" 
+            [checked]="todo.completed"
+            (change)="markComplete(todo.id)"
+            class="checkbox"
+          />
+          <span [class.completed]="todo.completed" class="task-name">
+            {{ todo.task }}
+          </span>
+        </div>
+        
+        <button 
+          (click)="deleteTodo(todo.id)" 
+          class="delete-btn">
+          Delete
+        </button>
+      </li>
+    </ul>
+  </div>
+
+  <ng-template #noTodos>
+    <p>No todos available. Please add some!</p>
+  </ng-template>
+</div>

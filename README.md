@@ -30,3 +30,5 @@ This API provides endpoints for creating, retrieving, updating, and deleting tod
 ## Additional Notes:
 
 - Adjust the database connection details in your .env file to match your PostgreSQL configuration. 
+
+P@ssw0rd!

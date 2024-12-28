@@ -250,7 +250,7 @@
 		  }
 		}
 	  },
-	  "/new/todo": {
+	  "/tasks/new/todo": {
 		"post": {
 		  "tags": ["Create new task"],
 		  "summary": "Task create",
@@ -384,7 +384,7 @@
 		  }
 		}
 	  },
-	  "/fetch/todos": {
+	  "/tasks/fetch/todos": {
 		"get": {
 		  "tags": ["Get all Todos"],
 		  "summary": "Get all Todos",
@@ -434,7 +434,7 @@
 		  }
 		}
 	  },
-	  "/fetch/todo/:id": {
+	  "/tasks/fetch/todo/:id": {
 		"get": {
 		  "tags": ["Get a single Todo"],
 		  "summary": "Get a specific Todo",
@@ -512,7 +512,7 @@
 		  }
 		}
 	  },
-	  "/update/todo/:id": {
+	  "/tasks/update/todo/:id": {
 		"put": {
 		  "tags": ["Update Todo"],
 		  "summary": "Update an existing Todo",
@@ -675,7 +675,7 @@
 		  }
 		}
 	  },
-	  "/delete/todo/:id": {
+	  "tasks/delete/todo/:id": {
 		"delete": {
 		  "tags": ["Delete Todo"],
 		  "summary": "Delete a Todo",
@@ -743,7 +743,7 @@
 		  }
 		}
 	  },
-	  "/refreshToken": {
+	  "password/refreshToken": {
 		"post": {
 		  "tags": ["Refresh Token"],
 		  "summary": "Refresh user token",
@@ -811,7 +811,7 @@
 		  }
 		}
 	  },
-	  "/logout": {
+	  "password/logout": {
 		"post": {
 		  "tags": ["Logout User"],
 		  "summary": "Logs the user out of the system",

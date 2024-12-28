@@ -1,8 +1,7 @@
-<!-- src/app/components/Register/register.component.html -->
 <h2>Register</h2>
-<form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+<form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
   <!-- Username Field -->
-  <div>
+  <div class="form-field">
     <label for="username">Username:</label>
     <input
       id="username"
@@ -11,12 +10,12 @@
       placeholder="Enter your username"
     />
     <div *ngIf="registerForm.get('username')?.invalid && registerForm.get('username')?.touched">
-      <small style="color: red;">Username is required.</small>
+      <small class="error-message">Username is required.</small>
     </div>
   </div>
 
   <!-- Email Field -->
-  <div>
+  <div class="form-field">
     <label for="email">Email:</label>
     <input
       id="email"
@@ -26,12 +25,12 @@
       placeholder="Enter your email"
     />
     <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
-      <small style="color: red;">A valid email is required.</small>
+      <small class="error-message">A valid email is required.</small>
     </div>
   </div>
 
   <!-- Password Field -->
-  <div>
+  <div class="form-field">
     <label for="password">Password:</label>
     <input
       id="password"
@@ -41,10 +40,16 @@
       placeholder="Enter your password"
     />
     <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
-      <small style="color: red;">Password is required.</small>
+      <small class="error-message">Password is required.</small>
     </div>
   </div>
 
   <!-- Submit Button -->
-  <button type="submit" [disabled]="registerForm.invalid">Register</button>
+  <button type="submit" [disabled]="registerForm.invalid" class="submit-btn">Register</button>
+
+  <!-- Login Redirect Button -->
+  <div class="login-redirect">
+    <p>Already have an account?</p>
+    <button type="button" class="login-link" (click)="redirectToLogin()">Login here</button>
+  </div>
 </form>

@@ -43,4 +43,7 @@ export class RegisterComponent {
       console.error('Form is invalid:', this.registerForm.errors);
     }
   }
+  redirectToLogin(): void {
+    this.router.navigate(['/login']); // Navigate to the login page
+  }
 }

@@ -6,7 +6,7 @@ const catchAsyncErrors = require('../middlewares/catchAsyncErrors.middleware.js'
 const { jwtTokens } = require('../utils/jwtToken.utils.js');
 const jwt = require('jsonwebtoken');
 const sendEmail = require('../utils/sendEmail.utils.js');
-const validate = require('../validations/input.validations.js');
+// const validate = require('../validations/input.validations.js');
 const sendToken = require('../utils/sendToken.utils.js');
 const { hashPassword } = require('../utils/passwordHash.utils.js');
 
@@ -22,13 +22,17 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHandler('Enter a valid email!', 401));
   }
 
+
   const user = await req.db('users').where('email', email).first();
   if (!user) {
     return next(new ErrorHandler('User not found with this email', 404));
   }
 
   const resetToken = jwtTokens(user).refreshToken;
-  const resetUrl = `${req.protocol}://${req.get('host')}/api/v1/password/reset/${resetToken}`;
+  // const resetUrl = `${req.protocol}://${req.get('host')}/api/v1/password/reset/${resetToken}`;
+
+  const resetUrl = `http://localhost:4200/reset-password/${resetToken}`;
+
 
   await req
     .db('users')
@@ -37,6 +41,9 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
       reset_password_token: resetToken,
       reset_password_expire: new Date(Date.now() + 3600000),
     });
+
+    
+  console.log("yes")
 
   const message = `Your password reset token is as follows:\n\n${resetUrl}\n\nIf you have not requested this email, then ignore it.`;
   await sendEmail({

@@ -7,12 +7,12 @@ import { catchError, Observable, throwError } from 'rxjs';
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:3000/api/v1/';
+  private apiUrl = 'http://localhost:3000/api/v1';
 
   constructor(private http: HttpClient) {}
 
   login(credentials: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/login`, credentials).pipe(
+    return this.http.post(`${this.apiUrl}/auth/login`, credentials).pipe(
       catchError((error) => {
         console.error('Login error:', error);
         return throwError(() => new Error(error));
@@ -21,7 +21,7 @@ export class AuthService {
   }
 
   register(userData: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/register`, userData).pipe(
+    return this.http.post(`${this.apiUrl}/auth/register`, userData).pipe(
       catchError((error) => {
         console.error('Registration error:', error.message);
         return throwError(() => new Error('Registration failed.'));
@@ -31,10 +31,10 @@ export class AuthService {
   
 
   forgotPassword(email: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/forgot-password`, email);
+    return this.http.post(`${this.apiUrl}/password/forgot`, email);
   }
 
   resetPassword(token: string, newPassword: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/reset-password/${token}`, newPassword);
+    return this.http.post(`${this.apiUrl}/password/reset-password/${token}`, newPassword);
   }
 }

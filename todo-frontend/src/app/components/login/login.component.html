@@ -1,10 +1,41 @@
-<!-- src/app/components/Login/login.component.html -->
 <h2>Login</h2>
-<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-  <label>Email:</label>
-  <input formControlName="email" required />
-  <label>Password:</label>
-  <input type="password" formControlName="password" required />
-  <button type="submit">Login</button>
-</form>
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+  <!-- Email Field -->
+  <div class="form-field">
+    <label for="email">Email:</label>
+    <input
+      id="email"
+      type="email"
+      formControlName="email"
+      required
+      placeholder="Enter your email"
+    />
+    <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+      <small class="error-message">A valid email is required.</small>
+    </div>
+  </div>
 
+  <!-- Password Field -->
+  <div class="form-field">
+    <label for="password">Password:</label>
+    <input
+      id="password"
+      type="password"
+      formControlName="password"
+      required
+      placeholder="Enter your password"
+    />
+    <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+      <small class="error-message">Password is required.</small>
+    </div>
+  </div>
+
+  <!-- Submit Button -->
+  <button type="submit" [disabled]="loginForm.invalid" class="submit-btn">Login</button>
+
+  <!-- Redirect Links -->
+  <div class="redirect-links">
+    <button type="button" class="signup-link" (click)="redirectToSignup()">Don't have an account? Sign Up</button>
+    <button type="button" class="forgot-password-link" (click)="redirectToForgotPassword()">Forgot Password?</button>
+  </div>
+</form>

@@ -4,7 +4,6 @@ const ErrorHandler = require('../middlewares/errors.middleware.js');
 
 //create new todos
 exports.createTodo = catchAsyncErrors(async (req, res, next) => {
-  console.log("we in")
   const { task, completed, user_id } = req.body;
   const existingTodo = await req.db('todos').where({ task, user_id }).first();
 
@@ -14,7 +13,7 @@ exports.createTodo = catchAsyncErrors(async (req, res, next) => {
       message: 'Todo with the same task and user already exists.',
     });
   }
-  console.log("Created procedure")
+  
   await req.db.raw('CALL create_todo(?, ?, ?)', [
     req.body.task,
     req.body.completed,
@@ -25,7 +24,7 @@ exports.createTodo = catchAsyncErrors(async (req, res, next) => {
   res.status(201).json({
     success: true,
     message: 'Todo created successfully!',
-    todo_id: todoId.id,
+    todo_id: todoId,
   });
 });
 
@@ -43,7 +42,7 @@ exports.getTodos = catchAsyncErrors(async (req, res, next) => {
     success: true,
     todos,
   });
-  // console.log('OK!')
+  console.log('OK!')
 });
 
 // Get a specific Todo by ID

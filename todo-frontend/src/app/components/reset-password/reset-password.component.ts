@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.services';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-reset-password',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule],
   standalone: true,
   templateUrl: './reset-password.component.html',
   styleUrl: './reset-password.component.css'
@@ -19,7 +20,8 @@ export class ResetPasswordComponent {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {
     this.resetPasswordForm = this.fb.group({
       password: ['', Validators.required],
@@ -33,6 +35,8 @@ export class ResetPasswordComponent {
       this.authService.resetPassword(this.token, this.resetPasswordForm.value).subscribe({
         next: (response) => {
           console.log('Password reset successfully:', response);
+
+          this.router.navigate(['/login']);
         },
         error: (error) => {
           console.error('Failed to reset password:', error);

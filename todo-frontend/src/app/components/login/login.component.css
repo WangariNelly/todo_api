@@ -1,28 +1,105 @@
+/* General Styles */
 h2 {
-    text-align: center;
-  }
-  form {
-    display: flex;
-    flex-direction: column;
-    max-width: 300px;
-    margin: 0 auto;
-  }
-  label {
-    margin-top: 10px;
-  }
-  input, button {
-    padding: 8px;
-    margin-top: 5px;
-    font-size: 1em;
-  }
-  button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
-    margin-top: 15px;
-  }
-  button:hover {
-    background-color: #0056b3;
-  }
-  
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 2rem;
+  color: #333;
+}
+
+form {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.form-field {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  font-size: 1rem;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-top: 5px;
+}
+
+input:focus {
+  outline: none;
+  border-color: #4CAF50; 
+}
+
+.error-message {
+  color: red;
+  font-size: 0.875rem;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  background-color: #4CAF50;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+button:disabled {
+  background-color: #b6e5b6; 
+  cursor: not-allowed;
+}
+
+.submit-btn {
+  margin-top: 20px;
+}
+
+.redirect-links {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.redirect-links button {
+  background: none;
+  border: none;
+  color: #4CAF50;
+  font-size: 1rem;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.redirect-links button:hover {
+  color: #45a049;
+}
+
+.redirect-links .forgot-password-link {
+  color: #f44336;  
+}
+
+.redirect-links .forgot-password-link:hover {
+  color: #e53935;
+}
+
+.signup-link,
+.forgot-password-link {
+  color: #4CAF50;
+  text-decoration: underline;
+}
